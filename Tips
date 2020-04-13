@@ -1,0 +1,16 @@
+# https://blog.csdn.net/magictong/article/details/3075478
+# 3、C基本类型和ctypes中实现的类型映射表 
+# ctypes数据类型          C数据类型 
+# c_char                          char 
+# c_short                         short 
+# c_int                             int 
+# c_long                          long 
+# c_ulong                        unsign long 
+# c_float                          float 
+# c_double                      double 
+# c_void_p                       void 
+# 对应的指针类型是在后面加上"_p"，如int*是c_int_p等等。 
+# 在python中要实现c语言中的结构，需要用到类。 
+  
+# 4、DLL中的函数返回一个指针。 
+# 虽然这不是个好的编程方法，不过这种情况的处理方法也很简单，其实返回的都是地址，把他们转换相应的python类型，再通过value属性访问。 
