@@ -1,6 +1,6 @@
 from ctypes import *
 from ctypes.wintypes import HWND
-from CommonProperty import NP_CARD_INFO
+from CommonProperty import *
 
 try:
     dll = windll.LoadLibrary('NovaPlutoManager.dll')
@@ -28,4 +28,4 @@ def NP_CreatePlayProgram(fileName,screenSize):
     create_play_program = dll.NP_CreatePlayProgram
     create_play_program.argtypes = (c_char_p,POINTER(NP_SIZE))
     # create_play_program.restype = 
-    return create_play_program()
+    return create_play_program(fileName,screenSize)

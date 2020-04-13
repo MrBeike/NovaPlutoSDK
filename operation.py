@@ -1,6 +1,6 @@
 from ctypes import *
-from CommonProperty import NP_CARD_INFO
-from NovaPlutoSDK import NovaPlutoSDK
+from CommonProperty import *
+from NovaPlutoSDK import *
 
 # appHwnd = c_int(0x00450888)
 # recvMsgID = c_int(0x800)
