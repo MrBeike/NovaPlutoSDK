@@ -20,6 +20,12 @@ def NP_Unitialize():
 
 def NP_ConnectCardofLocalNet(cardIP,isSync,cardInfo):
     connect_card_of_localnet = dll.NP_ConnectCardofLocalNet
-    connect_card_of_localnet.argtypes = (c_char_p,c_bool,NP_CARD_INFO)
+    connect_card_of_localnet.argtypes = (c_char_p,c_bool,POINTER(NP_CARD_INFO)
     connect_card_of_localnet.restype = c_bool
     return connect_card_of_localnet(cardIP,isSync,cardInfo)
+
+def NP_CreatePlayProgram(fileName,screenSize):
+    create_play_program = dll.NP_CreatePlayProgram
+    create_play_program.argtypes = (c_char_p,NP_SIZE)
+    # create_play_program.restype = 
+    return create_play_program()
