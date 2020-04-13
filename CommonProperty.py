@@ -1,5 +1,5 @@
 from ctypes import *
-
+#异步卡信息
 class NP_CARD_INFO(Structure):
      _fields_ = [
           ('IP', c_char_p), 
@@ -11,7 +11,8 @@ class NP_CARD_INFO(Structure):
           ('Reserved2',c_char_p),
           ('Reserved3',c_char_p)
           ]
-
+          
+#播放方案屏幕尺寸
 class NP_SIZE(Structure):
      _fields_ = [
           ('Width',c_int),

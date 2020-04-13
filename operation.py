@@ -10,10 +10,24 @@ from NovaPlutoSDK import *
 
 appHwnd = 51544                 
 recvMsgID = 2048
-serverIP = "172.22.178.2".encode("utf-8")
+serverIP = b"172.22.178.2"
 serverPort = 25000
-recvSavePath ="D:\\NovaPluto".endcode('utf-8')
+recvSavePath =b"D:\\NovaPluto"
+
+
 
 
 result = NP_Initialize(appHwnd, recvMsgID,serverIP, serverPort, recvSavePath)
 print(result)
+# screenSize = NP_SIZE(800,600)
+screenSize =NP_SIZE()
+screenSize.Width = 800
+screenSize.Height = 600
+fileName = b'D:\NovaPluto\A.plym'
+result = NP_CreatePlayProgram(fileName,screenSize)
+# print(result)
+
+
+
+
+k = NP_SendPlayProgram()
