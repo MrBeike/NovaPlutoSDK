@@ -2,705 +2,705 @@
 struct NP_POINT
 {
 public:
-	//ˮƽ��ʼλ��
+	//水平起始位置
 	unsigned int X;
-	//��ֱ��ʼλ��
+	//垂直起始位置
 	unsigned int Y;
 };
 //Size
 struct NP_SIZE
 {
 public:
-	//����
+	//宽度
 	int Width;
-	//�߶�
+	//高度
 	int Height;
 };
 //Rectangle
 struct NP_RECTANGLE
 {
 public:
-	//ˮƽ��ʼλ��
+	//水平起始位置
 	int X;
-	//��ֱ��ʼλ��
+	//垂直起始位置
 	int Y;
-	//����
+	//宽度
 	int Width;
-	//�߶�
+	//高度
 	int Height;
 };
-//����
+//日期
 struct NP_DATE
 {
 public:
-	//��
+	//年
 	int Year;
-	//��
+	//月
 	int Month;
-	//��
+	//日
 	int Day;
 };
-//ʱ��
+//时长
 struct NP_TIMESPAN
 {
 public:
-	// ʱ
+	// 时
 	int Hour;
-	// ��
+	// 分
 	int Minute;
-	// ��
+	// 秒
 	int Second;
-	// ����
+	// 毫秒
 	int MilliSeconds;
 };
-//����
+//字体
 struct NP_FONT
 {
 public:
-	//����
+	//字体
 	LOGFONTW TextFont;
-	//������ɫ
+	//字体颜色
 	COLORREF TextForeColor;
 };
-//������Ч
+//字体特效
 struct NP_FONT_EFFECT
 {
 public:
-	// ������ʾ��Ч��0��ʾ����Ч��1��ʾ������2��ʾ��ɫ
+	// 文字显示特效：0表示无特效，1表示悬浮，2表示套色
 	unsigned char EffectType;
-	// ������Ч����ɫ
+	// 文字特效的颜色
 	COLORREF EffectColor;
 };
-//ý����Ч
+//媒体特效
 struct NP_MEDIA_EFFECT
 {
 public:
-	// �Ƿ�����Ч
+	// 是否有特效
 	BOOL IsHasEffect;
-	// ��Ч��ֵ��0��ʾ�����
+	// 特效的值（0表示随机）
 	unsigned short EffectValue;
-	// ��Ч�ٶȣ���λΪ��0.1S��
+	// 特效速度（单位为：0.1S）
 	unsigned int EffectSpeed;
 };
-//�첽������Ϣ
+//异步卡的信息
 struct NP_CARD_INFO
 {
 public:
-	// �ն�IP
+	// 终端IP
 	char* IP;
-	// �ն�ID
+	// 终端ID
 	char* ID;
-	// �ն�����
+	// 终端名称
 	char* Name;
-	// ��ʾ������
+	// 显示屏宽度
 	unsigned int ScreenWidth;
-	// ��ʾ���߶�
+	// 显示屏高度
 	unsigned int ScreenHeight;
-	// Ԥ��
+	// 预留
 	char*  Reserved1;
-	// Ԥ��
+	// 预留
 	char*  Reserved2;
-	// Ԥ��
+	// 预留
 	char*  Reserved3;
 };
-//һ��������־��Ϣ
+//一条播放日志信息
 struct NP_PLAYLOG_ITEM
 {
 public:
-	// ý������
+	// 媒体名称
 	char* MediaName;
-	//ý��ʱ��
+	//媒体时长
 	NP_TIMESPAN MediaDuration;
-	// ���Ž����0��ʾ�ɹ���1��ʾ�ļ������ڣ�2��ʾ����ʧ�ܣ�3��ʾ����ʧ��
+	// 播放结果：0表示成功，1表示文件不存在，2表示加载失败，3表示播放失败
 	unsigned char PlayResType;
-	//�������ŵ�ʱ��
+	//启动播放的时间
 	SYSTEMTIME StartTime;
-	//ֹͣ���ŵ�ʱ��
+	//停止播放的时间
 	SYSTEMTIME StopTime;
 };
-//���ŷ�����ʱ��ε���Ϣ
+//播放方案中时间段的信息
 struct NP_TIMESEGMENT_INFO
 {
 public:
-	// �Ƿ�ָ�����ڲ���
+	// 是否指定日期播放
 	BOOL IsSpecificDate;
-	// �Ƿ�ָ��һ�ܵ�ĳһ��
+	// 是否指定一周的某一天
 	BOOL IsSpecificDayOfWeek;
-	// �Ƿ�ȫ�첥��
+	// 是否全天播放
 	BOOL IsWholeDayPlay;
-	//ʱ��ε�����
+	//时间段的名称
 	char* Name;
-	//һ�ܵ�ÿһ���Ƿ񲥷ţ�ֻ�е�IsSpecificDayOfWeekΪTrueʱ����Ч��
+	//一周的每一天是否播放（只有当IsSpecificDayOfWeek为True时才有效）
 	BOOL WeekDayIsValid[7];
-	// ��������
+	// 启动日期
 	NP_DATE StartDate;
-	// ֹͣ����
+	// 停止日期
 	NP_DATE StopDate;
 
-	// ��һ���е�����ʱ�䣨ֻ�е�IsWholeDayPlayΪFalseʱ����Ч��
+	// 在一天中的启动时间（只有当IsWholeDayPlay为False时才有效）
 	NP_TIMESPAN StartTimeOfDay;
-	// ��һ���е�ֹͣʱ�䣨ֻ�е�IsWholeDayPlayΪFalseʱ����Ч��
+	// 在一天中的停止时间（只有当IsWholeDayPlay为False时才有效）
 	NP_TIMESPAN StopTimeOfDay;
 };
-//����ҳ�����Ϣ
+//常规页面的信息
 struct NP_PAGE_INFO
 {
 public:
-	//ҳ������
+	//页的名称
 	char* Name;
-	// ���ŷ�ʽ��0��ʾָ��ʱ���� 1��ʾָ��������2��ʾѭ������
+	// 播放方式：0表示指定时长， 1表示指定次数，2表示循环播放
 	unsigned char PlayType;
-	// ���Ŵ�������PlayTypeΪ1ʱ��������Ч
+	// 播放次数，当PlayType为1时该属性有效
 	unsigned char PlayTimes;
-	// ����ʱ������PlayTypeΪ0ʱ��������Ч
+	// 播放时长，当PlayType为0时该属性有效
 	NP_TIMESPAN PlayDuration;
-	// ������ɫ
+	// 背景颜色
 	COLORREF BackColor;
 };
-//���ڵ���Ϣ
+//窗口的信息
 struct NP_WINDOW_INFO
 {
 public:
-	//ҳ������
+	//页的名称
 	char* Name;
-	//���ڵ����򣨰���λ�úʹ�С��
+	//窗口的区域（包括位置和大小）
 	NP_RECTANGLE WindowRect;
 };
-//��Ƶ�ļ�����Ϣ
+//视频文件的信息
 struct NP_VIDEOFIEL_INFO
 {
 public:
-	// ������ɫ
+	// 背景颜色
 	COLORREF BackColor;
-	// ���ű�����0��ʾ������1��ʾԭʼ����
+	// 播放比例：0表示铺满，1表示原始比例
 	unsigned char PlayScale;
-	// ������С(0~100)
+	// 音量大小(0~100)
 	unsigned char Volume;
 };
-//ͼƬ�ļ���Ϣ
+//图片文件信息
 struct NP_IMAGEFILE_INFO
 {
 public:
-	// ������ɫ
+	// 背景颜色
 	COLORREF BackColor;
-	// ��������·��������ޱ������֣��ò���������Ϊ�գ�
+	// 背景音乐路径（如果无背景音乐，该参数需设置为空）
 	char* BackMusicFileName;
 
-	//�볡��Ч��Ϣ
+	//入场特效信息
 	NP_MEDIA_EFFECT InEffectInfo;
 
-	//������Ч��Ϣ
+	//出场特效信息
 	NP_MEDIA_EFFECT OutEffectInfo;
 
-	// ���ű�����0��ʾ������1��ʾԭʼ����
+	// 播放比例：0表示铺满，1表示原始比例
 	unsigned char PlayScale;
-	// ͣ��ʱ�䣨��λ���룩
+	// 停留时间（单位：秒）
 	unsigned int StayTime;
 };
-//Flash����Ϣ
+//Flash的信息
 struct NP_FLASH_INFO
 {
 public:
-	// ������ɫ
+	// 背景颜色
 	COLORREF BackColor;
-	// ���ű�����0��ʾ������1��ʾԭʼ����
+	// 播放比例：0表示铺满，1表示原始比例
 	unsigned char PlayScale;
 };
-//Txt�ļ�����Ϣ
+//Txt文件的信息
 struct NP_TXTFILE_INFO
 {
 public:
-	// ������ɫ
+	// 背景颜色
 	COLORREF BackColor;
-	// ��������·��������ޱ������֣��ò���������Ϊ�գ�
+	// 背景音乐路径（如果无背景音乐，该参数需设置为空）
 	char* BackMusicFileName;
 
-	//�볡��Ч��Ϣ
+	//入场特效信息
 	NP_MEDIA_EFFECT InEffectInfo;
 
-	//������Ч��Ϣ
+	//出场特效信息
 	NP_MEDIA_EFFECT OutEffectInfo;
 
-	// ���ű�����0��ʾ������1��ʾԭʼ����
+	// 播放比例：0表示铺满，1表示原始比例
 	unsigned char PlayScale;
-	//  ͣ��ʱ�䣨��λ���룩
+	//  停留时间（单位：秒）
 	unsigned int StayTime;
 
-	// ��ɫ��ת���ͣ�0��ʾ������ת��1��ʾ������ɫ��ת��2��ʾ�ڰ׷�ת
+	// 颜色反转类型：0表示不作反转，1表示所有颜色反转，2表示黑白反转
 	unsigned char ColorInverseType;
 };
-//�����Ƶ���Ϣ
+//走马灯的信息
 struct NP_SCROLLTEXT_INFO
 {
 public:
-	//��������ʾ������
+	//走马灯显示的内容
 	char* Text;
-	//����
+	//字体
 	NP_FONT TextFont;
 
-	// ������ɫ
+	// 背景颜色
 	COLORREF BackColor;
 
-	//������Ч
+	//文字特效
 	NP_FONT_EFFECT TextEffect;
 
-	// �Ƿ����
+	// 是否滚动
 	BOOL IsScroll;
-	// ���������������
+	// 滚动间隔的像素数
 	unsigned int ScrollIntervalPixel;
-	// �����ٶȣ�0��ʾ������1��ʾ��֮��2��ʾ���٣�3��ʾ�ȳ��ٿ죬4��ʾ���
+	// 滚动速度：0表示最慢，1表示次之，2表示常速，3表示比常速快，4表示最快
 	unsigned char ScrollSpeed;
-	// ��������0��ʾ���ҵ���1��ʾ�����ң�2��ʾ���µ��ϣ�3��ʾ���ϵ���
+	// 滚动方向：0表示从右到左，1表示从左到右，2表示从下到上，3表示从上到下
 	unsigned char ScrollDirection;
 
-	// ����ʱ��
+	// 播放时长
 	NP_TIMESPAN PlayDuration;
 };
-//�����ı�����Ϣ
+//单行文本的信息
 struct NP_SINGLELINETEXT_INFO
 {
 public:
-	//�����ı���ʾ������
+	//单行文本显示的内容
 	char* Text;
-	//����
+	//字体
 	NP_FONT TextFont;
 
-	// ������ɫ
+	// 背景颜色
 	COLORREF BackColor;
 
-	//������Ч
+	//文字特效
 	NP_FONT_EFFECT TextEffect;
 
-	//�볡��Ч��Ϣ
+	//入场特效信息
 	NP_MEDIA_EFFECT InEffectInfo;
 
-	//������Ч��Ϣ
+	//出场特效信息
 	NP_MEDIA_EFFECT OutEffectInfo;
 
-	//  ͣ��ʱ�䣨��λ���룩
+	//  停留时间（单位：秒）
 	unsigned int StayTime;
 };
-//��̬�ı�����Ϣ
+//静态文本的信息
 struct NP_STATICTEXT_INFO
 {
 public:
-	//��̬�ı���ʾ������
+	//静态文本显示的内容
 	char* Text;
-	//����
+	//字体
 	NP_FONT TextFont;
 
-	// ������ɫ
+	// 背景颜色
 	COLORREF BackColor;
 
-	//������Ч
+	//文字特效
 	NP_FONT_EFFECT TextEffect;
 
-	// �о�
+	// 行距
 	unsigned int RowSpacing;
-	// �־�
+	// 字距
 	unsigned int CharacterSpacing;
 
-	// ���뷽ʽ��0��ʾ����1��ʾ���ң�2��ʾ����
+	// 对齐方式：0表示靠左，1表示靠右，2表示居中
 	unsigned char AlignmentType;
 
-	// ����ʱ��
+	// 播放时长
 	NP_TIMESPAN PlayDuration;
 };
-//ģ��ʱ�ӵ���Ϣ
+//模拟时钟的信息
 struct NP_ANALOGCLOCK_INFO
 {
 public:
-	// ������ɫ
+	// 背景颜色
 	COLORREF BackColor;
 
-	// ʱ����ɫ
+	// 时标颜色
 	COLORREF HourScaleColor;
-	// ʱ�����
+	// 时标宽度
 	unsigned short HourScaleWidth;
-	// ʱ��߶�
+	// 时标高度
 	unsigned short HourScaleHeight;
-	// ʱ����״��0��ʾ���Σ�1��ʾԲ�Σ�2��ʾ����
+	// 时标形状：0表示矩形，1表示圆形，2表示数字
 	unsigned char HourScaleShape;
-	//ʱ������壨��HourScaleShapeΪ2ʱ��ֵ��Ч��
+	//时标的字体（当HourScaleShape为2时该值有效）
 	LOGFONTW HourScaleFont;
 
-	// �ֱ���ɫ
+	// 分标颜色
 	COLORREF MinuteScaleColor;
-	// �ֱ����
+	// 分标宽度
 	unsigned short MinuteScaleWidth;
-	// �ֱ�߶�
+	// 分标高度
 	unsigned short MinuteScaleHeight;
-	// �ֱ����״��0��ʾ���Σ�1��ʾԲ��
+	// 分标的形状：0表示矩形，1表示圆形
 	unsigned char MinuteScaleShape;
 
-	// ��ʾ����������
+	// 显示的文字内容
 	char* Content;
-	// ���ֵ�����
+	// 文字的字体
 	NP_FONT ContentFont;
 
-	// �Ƿ���ʾ����
+	// 是否显示日期
 	BOOL IsShowDate;
-	// ���ڵ���ʾ���ͣ�0��ʾ����ǰ���ں�1��ʾ����ǰ���ں�
+	// 日期的显示类型：0表示月在前日在后，1表示日在前月在后
 	unsigned char DateShowType;
-	//���ڵ�����
+	//日期的字体
 	NP_FONT DateFont;
 
-	// �Ƿ���ʾ����
+	// 是否显示星期
 	BOOL IsShowWeekDay;
-	//���ڵ�����
+	//星期的字体
 	NP_FONT WeekDayFont;
 
-	// ʱ�����ɫ
+	// 时针的颜色
 	COLORREF HourHandColor;
-	// �������ɫ
+	// 分针的颜色
 	COLORREF MinuteHandColor;
-	// �������ɫ
+	// 秒针的颜色
 	COLORREF SecondHandColor;
 
-	// ����ʱ��
+	// 播放时长
 	NP_TIMESPAN PlayDuration;
 };
-//����ʱ�ӵ���Ϣ
+//数字时钟的信息
 struct NP_DIGITALCLOCK_INFO
 {
 public:
-	// �̶��ַ���
+	// 固定字符串
 	char* FixedContent;
 
-	// ���ڵ���ʾ���0��ʾ�����գ�1��ʾ�����꣬2��ʾ������
+	// 日期的显示风格：0表示年月日，1表示日月年，2表示月日年
 	unsigned char DateStyle;
 
-	//���ֵ�����
+	//文字的字体
 	NP_FONT TextFont;
 
-	//������Ч
+	//文字特效
 	NP_FONT_EFFECT TextEffect;
 
-	//�Ƿ���ʾ��
+	//是否显示年
 	BOOL IsShowYear;
-	// �Ƿ���ʾ��
+	// 是否显示月
 	BOOL IsShowMonth;
-	// �Ƿ���ʾ��
+	// 是否显示日
 	BOOL IsShowDay;
-	// �Ƿ���ʾ���磨���磩
+	// 是否显示上午（下午）
 	BOOL IsShowAmOrPm;
-	// �Ƿ���ʾʱ
+	// 是否显示时
 	BOOL IsShowHour;
-	// �Ƿ���ʾ��
+	// 是否显示分
 	BOOL IsShowMinute;
-	// �Ƿ���ʾ��
+	// 是否显示秒
 	BOOL IsShowSecond;
-	// �Ƿ���ʾ����
+	// 是否显示星期
 	BOOL IsShowWeekDay;
 
-	// �����ʾ���0��ʾ��λ������ʾ��1��ʾֻ��ʾ��ݵĺ���λ
+	// 年的显示风格：0表示四位数字显示，1表示只显示年份的后两位
 	unsigned char YearStyle;
-	// ʱ����ʾ���0��ʾ24Сʱ�ƣ�1��ʾ12Сʱ��
+	// 时的显示风格：0表示24小时制，1表示12小时制
 	unsigned char HourStyle;
-	// �Ƿ�֧�ֶ�����ʾ
+	// 是否支持多行显示
 	BOOL IsMultiLine;
 
-	// ����ʱ��
+	// 播放时长
 	NP_TIMESPAN PlayDuration;
 };
-//��������Ϣ
+//天气的信息
 struct NP_WEATHER_INFO
 {
 public:
-	// ������ɫ
+	// 背景颜色
 	COLORREF BackColor;
 
-	//���ֵ�����
+	//文字的字体
 	NP_FONT TextFont;
 
-	//������Ч
+	//文字特效
 	NP_FONT_EFFECT TextEffect;
 
-	// �������µ����ڣ���λ�����ӣ�
+	// 天气更新的周期（单位：分钟）
 	unsigned int UpdateInterval;
 
-	// ��ʾ���ͣ�0��ʾ�ֶ�����ʾ��1��ʾ���о�ֹ��2��ʾ���й���
+	// 显示类型：0表示分多行显示，1表示单行静止，2表示单行滚动
 	unsigned char ShowType;
-	// �����ٶȣ�ShowTypeΪ2ʱ��Ч��0��ʾ������1��ʾ��֮��2��ʾ���٣�3��ʾ�ȳ��ٿ죬4��ʾ���
+	// 滚动速度，ShowType为2时有效，0表示最慢，1表示次之，2表示常速，3表示比常速快，4表示最快
 	unsigned char ScrollSpeed;
 
-	// �Ƿ���ʾ����
+	// 是否显示天气
 	BOOL IsShowWeather;
-	// �Ƿ���ʾ�¶�
+	// 是否显示温度
 	BOOL IsShowTemperature;
-	// �Ƿ���ʾ����
+	// 是否显示风力
 	BOOL IsShowWind;
-	// �Ƿ���ʾʪ��
+	// 是否显示湿度
 	BOOL IsShowHumidity;
-	// �Ƿ���ʾ��ǰ�¶�
+	// 是否显示当前温度
 	BOOL IsShowCurTemperature;
 
-	// ������ProvinceName�̶���ʾ����
+	// 天气的ProvinceName固定显示内容
 	char* WeatherConstText;
-	// �¶ȵĹ̶���ʾ����
+	// 温度的固定显示内容
 	char* TempConstText;
-	// �����Ĺ̶���ʾ����
+	// 风力的固定显示内容
 	char* WindConstText;
-	// ��ǰ�¶ȵĹ̶���ʾ����
+	// 当前温度的固定显示内容
 	char* CurTempConstText;
-	// ʪ�ȵĹ̶���ʾ����
+	// 湿度的固定显示内容
 	char* HumiConstText;
 
-	//��������
+	//国家名称
 	char* CountryName;
-	//ʡ������
+	//省份名称
 	char* ProvinceName;
-	//��������
+	//城市名称
 	char* CityName;
 
-	// ����ʱ��
+	// 播放时长
 	NP_TIMESPAN PlayDuration;
 };
-//������
+//点检参数
 struct NP_DETECTPOINT_PARA
 {
 public:
-	//�����ֵ(��ͬ����оƬ��ֵ��Χ��ͬ)
+	//点检阈值(不同驱动芯片阈值范围不同)
 	BYTE Threshold;
-	//������ͣ���ͬ����оƬ֧�ֵĵ�����Ͳ�ͬ����0��ʾ��·��죬1��ʾ��·���
+	//点检类型（不同驱动芯片支持的点检类型不同）：0表示开路点检，1表示短路点检
 	BYTE PointDetectType;
-	//�Ƿ�ʹ�õ�ǰ���õĵ�������
+	//是否使用当前设置的电流增益
 	BOOLEAN IsUseCurrentGain;
-	//������
+	//红增益
 	BYTE RedGain;
-	//������
+	//绿增益
 	BYTE GreenGain;
-	//������
+	//蓝增益
 	BYTE BlutGain;
 };
-//���ϵƵ���Ϣ
+//故障灯点信息
 struct NP_ERRORPOINT_INFO
 {
 public:
-	//�����ܵ���
+	//故障总点数
 	unsigned int ErrorTotalCount;
 
-	//��ɫ���ϵƵ����
+	//红色故障灯点个数
 	unsigned int ErrorRedCount;
-	//��ɫ���ϵƵ������б���ָ��
+	//红色故障灯点坐标列表的指针
 	NP_POINT* ErrorRedPoint;
 	
-	//��ɫ���ϵƵ����
+	//绿色故障灯点个数
 	unsigned int ErrorGreenCount;
-	//��ɫ���ϵƵ������б���ָ��
+	//绿色故障灯点坐标列表的指针
 	NP_POINT* ErrorGreenPoint;
 
-	//��ɫ���ϵƵ����
+	//蓝色故障灯点个数
 	unsigned int ErrorBlueCount;
-	//��ɫ���ϵƵ������б���ָ��
+	//蓝色故障灯点坐标列表的指针
 	NP_POINT* ErrorBluePoint;
 
-	//�������ϵƵ����
+	//虚拟红故障灯点个数
 	unsigned int ErrorVRedCount;
-	//�������ϵƵ������б���ָ��
+	//虚拟红故障灯点坐标列表的指针
 	NP_POINT* ErrorVRedPoint;
 };
-//�����
+//点检结果
 struct NP_DETECTPOINT_RESULT
 {
 public:
-	//��������
+	//箱体索引
 	unsigned short CabinetIndex;
-	//��������ʾ���е�λ�úʹ�С
+	//箱体在显示屏中的位置和大小
 	NP_RECTANGLE CabinetRegion;
 
-	//�����ܵ���
+	//像素总点数
 	unsigned int PixelTotalCount;
-	//���Ĺ��ϵƵ���Ϣ
+	//点检的故障灯点信息
 	NP_ERRORPOINT_INFO ErrorPointInfo;
 };
-//ֵ��Ϣ
+//值信息
 struct NP_VALUE_INFO
 {
 public:
-	//�Ƿ���Ч
+	//是否有效
 	BOOLEAN IsValid;
-	//ֵ��ֻ�е�IsValidΪTrueʱ����Ч��
+	//值，只有当IsValid为True时才有效。
 	float Value;
 };
-//�澯��Ϣ
+//告警信息
 struct NP_ALARM_INFO
 {
 public:
-	//�Ƿ���Ч
+	//是否有效
 	BOOLEAN IsValid;
-	//�Ƿ�澯��ֻ��IsValidΪTrueʱ����Ч��
+	//是否告警，只有IsValid为True时才有效。
 	BOOLEAN IsAlarm;
 };
-//����ļ������
+//箱体的监控数据
 struct NP_MONITOR_INFO
 {
 public:
-	//��������
+	//箱体索引
 	unsigned short CabinetIndex;
-	//��������ʾ���е�λ�úʹ�С
+	//箱体在显示屏中的位置和大小
 	NP_RECTANGLE CabinetRegion;
 
-	//����״̬
+	//箱体状态
 	BOOLEAN CabinetStatusIsOK;
-	//������ص�ѹ��Ϣ��ֻ��CabinetStatusIsOKΪTrueʱ����Ч
+	//箱体板载电压信息，只有CabinetStatusIsOK为True时才有效
 	NP_VALUE_INFO CabinetVoltage;
-	//�¶���Ϣ��ֻ��CabinetStatusIsOKΪTrueʱ����Ч
+	//温度信息，只有CabinetStatusIsOK为True时才有效
 	NP_VALUE_INFO TempInfo;
 
-	//�Ƿ����Ӽ�ؿ���ֻ��CabinetStatusIsOKΪTrueʱ����Ч
+	//是否连接监控卡，只有CabinetStatusIsOK为True时才有效
 	BOOLEAN IsConnectMCard;
-	//��ؿ��İ��ص�ѹ��ֻ�е�CabinetStatusIsOK��IsConnectMCard��ΪTrueʱ����Ч
+	//监控卡的板载电压，只有当CabinetStatusIsOK和IsConnectMCard均为True时才有效
 	NP_VALUE_INFO MCardVoltage;
-	//ʪ����Ϣ��ֻ�е�CabinetStatusIsOK��IsConnectMCard��ΪTrueʱ����Ч
+	//湿度信息，只有当CabinetStatusIsOK和IsConnectMCard均为True时才有效
 	NP_VALUE_INFO HumidityInfo;
-	//�����Ƿ�رգ�ֻ�е�CabinetStatusIsOK��IsConnectMCard��ΪTrueʱ����Ч
+	//箱门是否关闭：只有当CabinetStatusIsOK和IsConnectMCard均为True时才有效
 	BOOLEAN CabinetDoorIsClose;
-	//�����澯��Ϣ��ֻ�е�CabinetStatusIsOK��IsConnectMCard��ΪTrueʱ����Ч
+	//烟雾告警信息，只有当CabinetStatusIsOK和IsConnectMCard均为True时才有效
 	NP_ALARM_INFO SmokeAlarmInfo;
-	////���ȸ�����ֻ�е�CabinetStatusIsOK��IsConnectMCard��ΪTrueʱ����Ч
+	////风扇个数，只有当CabinetStatusIsOK和IsConnectMCard均为True时才有效
 	BYTE FanCount;
-	//������Ϣ�б���ָ�룬ֻ�е�CabinetStatusIsOK��IsConnectMCard��ΪTrueʱ����Ч
+	//风扇信息列表的指针，只有当CabinetStatusIsOK和IsConnectMCard均为True时才有效
 	NP_VALUE_INFO* FanInfoPtr;
-	//��Դ������ֻ�е�CabinetStatusIsOK��IsConnectMCard��ΪTrueʱ����Ч
+	//电源个数，只有当CabinetStatusIsOK和IsConnectMCard均为True时才有效
 	BYTE MCPowerCount;
-	//��Դ��Ϣ�б���ָ�룬ֻ�е�CabinetStatusIsOK��IsConnectMCard��ΪTrueʱ����Ч
+	//电源信息列表的指针，只有当CabinetStatusIsOK和IsConnectMCard均为True时才有效
 	NP_VALUE_INFO* MCVoltagePtr;
 
-	//����״̬�Ƿ�OK,ֻ�е�CabinetStatusIsOK��IsConnectMCard��ΪTrueʱ����Ч
+	//排线状态是否OK,只有当CabinetStatusIsOK和IsConnectMCard均为True时才有效
 	BOOLEAN IsRowLineOK;
 };
 #pragma pack(1)
-//�����Դ�Զ����Ƶ�ʱ����Ϣ
+//本板电源自动控制的时间信息
 struct NP_BDPOWER_AUTOTIME_INFO
 {
 public:
-	//�Ƿ���ָ�����ڿ��Ƶ�Դ
+	//是否在指定日期控制电源
 	BOOL IsSpecialDate;
-	//ָ�����ڵ���ʼ���ڣ�ֻ�е�IsSpecialDateΪTrueʱ����Ч
+	//指定日期的起始日期，只有当IsSpecialDate为True时才有效
 	NP_DATE StartDate;
-	//ָ�����ڵĽ������ڣ�ֻ�е�IsSpecialDateΪTrueʱ����Ч
+	//指定日期的结束日期，只有当IsSpecialDate为True时才有效
 	NP_DATE StopDate;
-	//һ���ڵ�ÿһ���Ƿ���ƣ������ָ�����ڣ����Ӧ��ֵ����ΪFalse,˳������Ϊ�����쵽��������
+	//一周内的每一天是否控制，如果不指定星期，则对应的值设置为False,顺序依次为星期天到星期六。
 	BOOL WeekDayIsValid[7];
-	//��Դ����ʱ��
+	//电源开启时间
 	NP_TIMESPAN OpenTime;
-	//��Դ�ر�ʱ��
+	//电源关闭时间
 	NP_TIMESPAN CloseTime;
 };
-//�����Դ�Զ�������Ϣ
+//本板电源自动控制信息
 struct NP_BDPOWER_AUTOCTRL_INFO
 {
 public:
-	//�����Դ�Զ�������Ϣ��ĸ���
+	//本板电源自动控制信息项的个数
 	unsigned short CtrlInfoCount;
-	//�����Դ�Զ�������Ϣ�б�
+	//本板电源自动控制信息列表
 	NP_BDPOWER_AUTOTIME_INFO* CtrlInfoArray;
 };
-//�๦�E���ϵ�һ·��Դ�Զ�������Ϣ
+//多功鞥卡上的一路电源自动控制信息
 struct NP_FUNPOWER_AUTOTIME_INFO
 {
 public:
-	//��Դ����ʱ��
+	//电源开启时间
 	NP_TIMESPAN OpenTime;
-	//��Դ�ر�ʱ��
+	//电源关闭时间
 	NP_TIMESPAN CloseTime;
 };
-//�๦�ܿ��ϵĵ�Դ�Զ�������Ϣ
+//多功能卡上的电源自动控制信息
 struct NP_FUNPOWER_AUTOCTRL_INFO
 {
 public:
-	//��Դ�Զ�������Ϣ�б�,�๦�ܿ�8·��Դͳһ����
+	//电源自动控制信息列表,多功能卡8路电源统一设置
 	NP_FUNPOWER_AUTOTIME_INFO CtrlInfoArray[8];
 };
-//���Ӽ��Ĳ���
+//连接检测的参数
 struct NP_CONNECTDETECT_PARA
 {
 public:
-	//����״̬��������
-	//0����ʾ���������״̬;
-	//1����ʾ�����������Ƿ��������ӣ������ù��ܺ�����첽���Ͽ�������˵����ӣ�����ʾ��������
-	//2����ʾ����첽������������״̬�������ù��ܺ������ͨѶ�����δ�յ��κ��������ʾ��������
+	//连接状态检测的类型
+	//0：表示不检测连接状态;
+	//1：表示检测与管理端是否正常连接，开启该功能后，如果异步卡断开与管理端的连接，则显示屏黑屏；
+	//2：表示检测异步卡处于虚连接状态，开启该功能后，如果在通讯间隔内未收到任何命令，则显示屏黑屏；
 	unsigned char DetectType;
-	//������״̬���ʱ����СͨѶ�����ֻ�е�DetectTypeΪ2ʱ����Ч,��λΪ�룬Ĭ��60�룬��Сֵ60��
+	//虚连接状态检测时的最小通讯间隔，只有当DetectType为2时才有效,单位为秒，默认60秒，最小值60秒
 	unsigned short VirConnectMinInterval;
 };
-//ȫ�ּ����Ϣ
+//全局监控信息
 struct NP_GLOBALMONITOR_INFO
 {
 public:
-	//����״̬
+	//箱体状态
 	BOOLEAN CabinetStatusIsOK;
-	//�����ѹ�Ƿ�OK
+	//箱体电压是否OK
 	BOOLEAN CabinetVoltageIsOK;
-	//�Ƿ����Ӽ�ؿ�
+	//是否连接监控卡
 	BOOLEAN IsConnectMonitorCard;
-	//��ؿ���ѹ�Ƿ�OK
+	//监控卡电压是否OK
 	BOOLEAN MCVoltageIsOK;
-	//�����Ƿ�ر�
+	//箱门是否关闭
 	BOOLEAN CabinetDoorIsClose;
-	//�����Ƿ�OK
+	//排线是否OK
 	BOOLEAN RowLineIsOK;
-	//��̽ͷ�Ƿ�OK
+	//光探头是否OK
 	BOOLEAN LightSensorIsOK;
 };
-//���Ͳ����ļ��Ľ�����Ϣ
+//发送播放文件的进度信息
 struct NP_SENDPLAYFILE_INFO
 {
 public:
-	//��ǰ���͵��ļ�����
+	//当前发送的文件名称
 	char* SendFileName;
-	//��ǰ���ڷ��͵��ļ��ķ��ͽ���
+	//当前正在发送的文件的发送进度
 	float CurFilePercent;
-	//�����ܽ���
+	//发送总进度
 	float TotalPercent;
 };
-//�ն������Լ����
+//终端周期自检参数
 struct NP_SELFMONITORCTRL_PARA
 {
 public:
-	//�Ƿ����������Լ칦��
+	//是否启用周期自检功能
 	BOOLEAN IsCycleSelfMonitor;
-	//�Լ����ڣ���λΪ���ӣ�Ĭ��Ϊ30���ӣ���СֵΪ5����
+	//自检周期，单位为分钟，默认为30分钟，最小值为5分钟
 	int SelfMonitorPeriod;
-	//���߹���ʱ�Ŀ������ͣ�0��ʾ�����ƣ�1��ʾ���߹���ʱ����
+	//排线故障时的控制类型：0表示不控制，1表示排线故障时黑屏
 	unsigned char RowLineErrorCtrlType;
 };
-//���ȵ�����Ϣ
+//亮度调节信息
 struct NP_BRIGHTADJUST_INFO
 {
 public:
-	//����ʱ��
+	//调节时间
 	NP_TIMESPAN AdjustTime;
-	//��������ֵ(0%~100%)
+	//调节亮度值(0%~100%)
 	BYTE BrightValue;
 };
-//��ʱ���ȵ�����Ϣ
+//定时亮度调节信息
 struct NP_SCHEDUALBRIGHT_INFO
 {
 public:
-	//������Ϣ������
+	//调节信息饿个数
 	unsigned short AdjustInfoCount;
-	//������Ϣ�б�
+	//调节信息列表
 	NP_BRIGHTADJUST_INFO* AdjustInfoArray;
 };
-//�洢�豸��Ϣ
+//存储设备信息
 struct NP_STORAGEDEVICE_INFO
 {
 public:
-	//��ǰ�洢�豸���ͣ�0��ʾFlash��1��ʾSD����2��ʾUSB�ڽ����Ӳ��
+	//当前存储设备类型：0表示Flash，1表示SD卡，2表示USB口接入的硬件
 	unsigned char CurStorageDeviceType;
-	//Flash��ʣ��ռ��С����λΪ�ֽ�
+	//Flash的剩余空间大小：单位为字节
 	INT64 FlashFreeSpace;
-	//Flash���ܿռ��С����λΪ�ֽ�
+	//Flash的总空间大小：单位为字节
 	INT64 FlashTotalSpace;
-	//SD����ʣ��ռ��С����λΪ�ֽ�
+	//SD卡的剩余空间大小：单位为字节
 	INT64 SDCardFreeSpace;
-	//SD�����ܿռ��С����λΪ�ֽ�
+	//SD卡的总空间大小：单位为字节
 	INT64 SDCardTotalSpace;
-	//USB�ڽӿ��豸��ʣ��ռ��С����λΪ�ֽ�
+	//USB口接口设备的剩余空间大小：单位为字节
 	INT64 UDiskFreeSpace;
-	//USB�ڽӿ��豸���ܿռ��С����λΪ�ֽ�
+	//USB口接口设备的总空间大小：单位为字节
 	INT64 UDiskTotalSpace;
 };
 #pragma pack

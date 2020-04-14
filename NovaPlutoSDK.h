@@ -10,655 +10,655 @@
 #define WM_REFRESHMONITOROK = 0x0519;
 #define WM_REFRESHMONITORFAILED = 0x0520;
 
-//��ʼ��ϵͳ
-//appHwnd�� Ӧ�ó���Ĵ��ھ��
-//recvMsgID�� Ӧ�ó�������첽���첽��֪ͨ��Ϣ������ϢID
-//serverIP: Ӧ�ó������ڼ������IP
-//serverPort: Ӧ�ó������ڼ�������罻���Ķ˿�
-//recvSavePath��Ӧ�ó������й����л�ȡ���첽������Ϣ�洢·��
-//����ֵ��ϵͳ��ʼ���Ľ��
+//初始化系统
+//appHwnd： 应用程序的窗口句柄
+//recvMsgID： 应用程序接收异步卡异步卡通知信息的主消息ID
+//serverIP: 应用程序所在计算机的IP
+//serverPort: 应用程序所在计算机网络交互的端口
+//recvSavePath：应用程序运行过程中获取到异步卡的信息存储路径
+//返回值：系统初始化的结果
 extern "C" __declspec(dllexport)bool __stdcall NP_Initialize(HWND appHwnd, int recvMsgID, 
 															 char* serverIP, int serverPort, 
 															 char* recvSavePath);
-//����ʼ�����ͷ���Դ
+//反初始化并释放资源
 extern "C" __declspec(dllexport)void __stdcall NP_UnInitialize();
-//���Ӿ��������첽��
-//cardIP����Ҫ���ӵ��첽��IP������ֵΪ255.255.255.255ʱ��ʾ�㲥���ӵ�ǰ�������������նˣ�
-//        ��ʱ����isSync��True����False�������첽֪ͨ���ӵ����첽����
-//isSync���Ƿ�ͬ��֪ͨ���ӽ��
-//cardInfo��isSyncΪTrueʱ�����ӵ����첽����Ϣ
-//����ֵ����isSyncΪTrue�����ʾ�����첽���Ľ������ʱ�������True����cardInfoΪ���ӵ����첽����Ϣ�����������첽��ʧ��
-//        ��isSyncΪFalse�����ʾ���������첽��������������ʱ�������True�����ʾ��������ɹ��������ʾ��������ʧ�ܡ�
-//��ע���첽֪ͨʱ��Ӧ�ó�����յ�WM_CARDINFO����Ϣ����ϢIDΪ��ʼ��ʱ���õ���ϢID��WPARAM����ΪWM_CARDINFO��
-//      LPARAM����Ϊ���ӵ����첽����Ϣָ��
+//连接局域网的异步卡
+//cardIP：需要连接的异步卡IP，当该值为255.255.255.255时表示广播连接当前局域网的所有终端，
+//        此时无论isSync是True还是False，均是异步通知连接到的异步卡。
+//isSync：是否同步通知连接结果
+//cardInfo：isSync为True时，连接到的异步卡信息
+//返回值：当isSync为True，则表示连接异步卡的结果，此时如果返回True，则cardInfo为连接到的异步卡信息，否则连接异步卡失败
+//        当isSync为False，则表示发送连接异步卡的命令结果，此时如果返回True，则表示发送命令成功，否则表示发送命令失败。
+//备注：异步通知时，应用程序会收到WM_CARDINFO的消息，消息ID为初始化时设置的消息ID，WPARAM参数为WM_CARDINFO，
+//      LPARAM参数为连接到的异步卡信息指针
 extern "C" __declspec(dllexport)bool __stdcall NP_ConnectCardOfLocalNet(char* cardIP, bool isSync,
 																		NP_CARD_INFO* cardInfo);
-//��ȡ�첽������Ϣ
-//cardID����Ҫ��ȡ��Ϣ���첽��ID
-//isSync���Ƿ�ͬ��֪ͨ��ȡ���Ľ��
-//cardInfo��isSyncΪTrueʱ����ȡ�����첽����Ϣ
-//����ֵ����isSyncΪTrue�����ʾ��ȡ�첽����Ϣ�������ʱ�������True����cardInfoΪ��ȡ�����첽����Ϣ�������ȡ�첽����Ϣʧ��
-//        ��isSyncΪFalse�����ʾ���ͻ�ȡ�첽����Ϣ������������ʱ�������True�����ʾ��������ɹ��������ʾ��������ʧ�ܡ�
-//��ע���첽֪ͨʱ��Ӧ�ó�����յ�WM_CARDINFO����Ϣ����ϢIDΪ��ʼ��ʱ���õ���ϢID��WPARAM����ΪWM_CARDINFO��
-//      LPARAM����Ϊ��ȡ�����첽����Ϣָ��
+//获取异步卡的信息
+//cardID：需要获取信息的异步卡ID
+//isSync：是否同步通知获取到的结果
+//cardInfo：isSync为True时，获取到的异步卡信息
+//返回值：当isSync为True，则表示获取异步卡信息结果，此时如果返回True，则cardInfo为获取到的异步卡信息，否则获取异步卡信息失败
+//        当isSync为False，则表示发送获取异步卡信息的命令结果，此时如果返回True，则表示发送命令成功，否则表示发送命令失败。
+//备注：异步通知时，应用程序会收到WM_CARDINFO的消息，消息ID为初始化时设置的消息ID，WPARAM参数为WM_CARDINFO，
+//      LPARAM参数为获取到的异步卡信息指针
 extern "C" __declspec(dllexport)bool __stdcall NP_GetCardInfo(char* cardID, bool isSync,
 															  NP_CARD_INFO* cardInfo);
-//�������ŷ���
-//fileName����Ҫ�����Ĳ��ŷ����ļ�ȫ·��
-//screenSize�������Ĳ��ŷ�������ʾ���Ĵ�С���������ߣ�
-//����ֵ�������Ĳ��ŷ������������������ʧ����ΪNULL
+//创建播放方案
+//fileName：需要创建的播放方案文件全路径
+//screenSize：创建的播放方案中显示屏的大小（包含宽高）
+//返回值：创建的播放方案对象句柄，如果创建失败则为NULL
 extern "C" __declspec(dllexport)HANDLE __stdcall NP_CreatePlayProgram(char* fileName,
 																	  NP_SIZE screenSize);
-//��ָ��·���Ĳ��ŷ���
-//fileName����Ҫ�򿪵Ĳ��ŷ���ȫ·��
-//����ֵ���򿪵Ĳ��ŷ�����������������ļ�ʧ����ΪNULL
+//打开指定路径的播放方案
+//fileName：需要打开的播放方案全路径
+//返回值：打开的播放方案对象句柄，如果打开文件失败则为NULL
 extern "C" __declspec(dllexport)HANDLE __stdcall NP_OpenPlayProgram(char* fileName);
-//��ָ�����ŷ�������ʱ���
-//programHwnd����Ҫ����ʱ��εĲ��ŷ���������
-//propInfo�����ӵ�ʱ�����Ϣ
-//����ֵ������ʱ��εĽ�������ΪTrue���ʾ���ӳɹ�����������ʧ��
+//给指定播放方案添加时间段
+//programHwnd：需要添加时间段的播放方案对象句柄
+//propInfo：添加的时间段信息
+//返回值：添加时间段的结果，如果为True则表示添加成功，否则添加失败
 extern "C" __declspec(dllexport)bool __stdcall NP_AddTimeSegment(HANDLE programHwnd,
 																 NP_TIMESEGMENT_INFO propInfo);
-//��ָ�����ŷ�����ָ��ʱ������ӳ���ҳ��
-//programHwnd����Ҫ����ҳ��Ĳ��ŷ���������
-//timeSegmentIndex�����ŷ�������Ҫ����ҳ���ʱ�����������0��ʼ��
-//propInfo�����ӵ�ҳ����Ϣ
-//����ֵ������ҳ��Ľ�������ΪTrue���ʾ���ӳɹ�����������ʧ��
+//给指定播放方案的指定时间段添加常规页面
+//programHwnd：需要添加页面的播放方案对象句柄
+//timeSegmentIndex：播放方案中需要添加页面的时间段索引（从0开始）
+//propInfo：添加的页面信息
+//返回值：添加页面的结果，如果为True则表示添加成功，否则添加失败
 extern "C" __declspec(dllexport)bool __stdcall NP_AddBasicPage(HANDLE programHwnd,
 															   unsigned short timeSegmentIndex, 
 															   NP_PAGE_INFO propInfo);
-//��ָ�����ŷ���ָ��ʱ��ε�ָ��ҳ�����Ӵ���
-//programHwnd����Ҫ���Ӵ��ڵĲ��ŷ���������
-//timeSegmentIndex�����ŷ�������Ҫ���Ӵ��ڵ�ҳ�����ڵ�ʱ�����������0��ʼ��
-//pageIndex�����ŷ�������Ҫ���Ӵ��ڵ�ҳ����������0��ʼ��
-//propInfo�����ӵĴ�����Ϣ
-//����ֵ�����Ӵ��ڵĽ�������ΪTrue���ʾ���ӳɹ�����������ʧ��
+//给指定播放方案指定时间段的指定页面添加窗口
+//programHwnd：需要添加窗口的播放方案对象句柄
+//timeSegmentIndex：播放方案中需要添加窗口的页面所在的时间段索引（从0开始）
+//pageIndex：播放方案中需要添加窗口的页面索引（从0开始）
+//propInfo：添加的窗口信息
+//返回值：添加窗口的结果，如果为True则表示添加成功，否则添加失败
 extern "C" __declspec(dllexport)bool __stdcall NP_AddWindowToPage(HANDLE programHwnd,
 																  unsigned short timeSegmentIndex,
 																  unsigned short pageIndex,
 																  NP_WINDOW_INFO propInfo);
-//��ָ�����ŷ���ָ��ʱ���ָ��ҳ���ָ������������Ƶ�ļ�
-//programHwnd����Ҫ������Ƶ�ļ��Ĳ��ŷ���������
-//timeSegmentIndex�����ŷ�������Ҫ������Ƶ�ļ��Ĵ������ڵ�ʱ�����������0��ʼ��
-//pageIndex�����ŷ�������Ҫ������Ƶ�ļ��Ĵ������ڵ�ҳ����������0��ʼ��
-//windowIndex�����ŷ�������Ҫ������Ƶ�ļ��Ĵ�����������0��ʼ��
-//fileName�����ӵ���Ƶ�ļ�ȫ·��
-//propInfo����Ƶ�ļ��Ĳ��Ų���
-//����ֵ��������Ƶ�ļ��Ľ�������ΪTrue���ʾ���ӳɹ�����������ʧ��
+//给指定播放方案指定时间段指定页面的指定窗口添加视频文件
+//programHwnd：需要添加视频文件的播放方案对象句柄
+//timeSegmentIndex：播放方案中需要添加视频文件的窗口所在的时间段索引（从0开始）
+//pageIndex：播放方案中需要添加视频文件的窗口所在的页面索引（从0开始）
+//windowIndex：播放方案中需要添加视频文件的窗口索引（从0开始）
+//fileName：添加的视频文件全路径
+//propInfo：视频文件的播放参数
+//返回值：添加视频文件的结果，如果为True则表示添加成功，否则添加失败
 extern "C" __declspec(dllexport)bool __stdcall NP_AddVideoFile(HANDLE programHwnd,
 															   unsigned short timeSegmentIndex,
 															   unsigned short pageIndex,
 															   unsigned int windowIndex,
 															   char* fileName,
 															   NP_VIDEOFIEL_INFO propInfo);
-//��ָ�����ŷ���ָ��ʱ���ָ��ҳ���ָ����������ͼƬ�ļ�
-//programHwnd����Ҫ����ͼƬ�ļ��Ĳ��ŷ���������
-//timeSegmentIndex�����ŷ�������Ҫ����ͼƬ�ļ��Ĵ������ڵ�ʱ�����������0��ʼ��
-//pageIndex�����ŷ�������Ҫ����ͼƬ�ļ��Ĵ������ڵ�ҳ����������0��ʼ��
-//windowIndex�����ŷ�������Ҫ����ͼƬ�ļ��Ĵ�����������0��ʼ��
-//fileName�����ӵ�ͼƬ�ļ�ȫ·��
-//propInfo��ͼƬ�ļ��Ĳ��Ų���
-//����ֵ������ͼƬ�ļ��Ľ�������ΪTrue���ʾ���ӳɹ�����������ʧ��
+//给指定播放方案指定时间段指定页面的指定窗口添加图片文件
+//programHwnd：需要添加图片文件的播放方案对象句柄
+//timeSegmentIndex：播放方案中需要添加图片文件的窗口所在的时间段索引（从0开始）
+//pageIndex：播放方案中需要添加图片文件的窗口所在的页面索引（从0开始）
+//windowIndex：播放方案中需要添加图片文件的窗口索引（从0开始）
+//fileName：添加的图片文件全路径
+//propInfo：图片文件的播放参数
+//返回值：添加图片文件的结果，如果为True则表示添加成功，否则添加失败
 extern "C" __declspec(dllexport)bool __stdcall NP_AddImageFile(HANDLE programHwnd,
 															   unsigned short timeSegmentIndex,
 															   unsigned short pageIndex,
 															   unsigned int windowIndex,
 															   char* fileName,
 															   NP_IMAGEFILE_INFO propInfo);
-//��ָ�����ŷ���ָ��ʱ���ָ��ҳ���ָ���������Ӷ����ļ�
-//programHwnd����Ҫ���Ӷ����ļ��Ĳ��ŷ���������
-//timeSegmentIndex�����ŷ�������Ҫ���Ӷ����ļ��Ĵ������ڵ�ʱ�����������0��ʼ��
-//pageIndex�����ŷ�������Ҫ���Ӷ����ļ��Ĵ������ڵ�ҳ����������0��ʼ��
-//windowIndex�����ŷ�������Ҫ���Ӷ����ļ��Ĵ�����������0��ʼ��
-//fileName�����ӵĶ����ļ�ȫ·��
-//propInfo�������ļ��Ĳ��Ų���
-//����ֵ�����Ӷ����ļ��Ľ�������ΪTrue���ʾ���ӳɹ�����������ʧ��
+//给指定播放方案指定时间段指定页面的指定窗口添加动画文件
+//programHwnd：需要添加动画文件的播放方案对象句柄
+//timeSegmentIndex：播放方案中需要添加动画文件的窗口所在的时间段索引（从0开始）
+//pageIndex：播放方案中需要添加动画文件的窗口所在的页面索引（从0开始）
+//windowIndex：播放方案中需要添加动画文件的窗口索引（从0开始）
+//fileName：添加的动画文件全路径
+//propInfo：动画文件的播放参数
+//返回值：添加动画文件的结果，如果为True则表示添加成功，否则添加失败
 extern "C" __declspec(dllexport)bool __stdcall NP_AddFlashFile(HANDLE programHwnd,
 															   unsigned short timeSegmentIndex,
 															   unsigned short pageIndex,
 															   unsigned int windowIndex,
 															   char* fileName,
 															   NP_FLASH_INFO propInfo);
-//��ָ�����ŷ���ָ��ʱ���ָ��ҳ���ָ�����������ı��ļ���txt�ļ���
-//programHwnd����Ҫ�����ı��ļ���txt�ļ����Ĳ��ŷ���������
-//timeSegmentIndex�����ŷ�������Ҫ�����ı��ļ���txt�ļ����Ĵ������ڵ�ʱ�����������0��ʼ��
-//pageIndex�����ŷ�������Ҫ�����ı��ļ���txt�ļ����Ĵ������ڵ�ҳ����������0��ʼ��
-//windowIndex�����ŷ�������Ҫ�����ı��ļ���txt�ļ����Ĵ�����������0��ʼ��
-//fileName�����ӵ��ı��ļ���txt�ļ���ȫ·��
-//propInfo���ı��ļ���txt�ļ����Ĳ��Ų���
-//����ֵ�������ı��ļ���txt�ļ����Ľ�������ΪTrue���ʾ���ӳɹ�����������ʧ��
+//给指定播放方案指定时间段指定页面的指定窗口添加文本文件（txt文件）
+//programHwnd：需要添加文本文件（txt文件）的播放方案对象句柄
+//timeSegmentIndex：播放方案中需要添加文本文件（txt文件）的窗口所在的时间段索引（从0开始）
+//pageIndex：播放方案中需要添加文本文件（txt文件）的窗口所在的页面索引（从0开始）
+//windowIndex：播放方案中需要添加文本文件（txt文件）的窗口索引（从0开始）
+//fileName：添加的文本文件（txt文件）全路径
+//propInfo：文本文件（txt文件）的播放参数
+//返回值：添加文本文件（txt文件）的结果，如果为True则表示添加成功，否则添加失败
 extern "C" __declspec(dllexport)bool __stdcall NP_AddTxtFile(HANDLE programHwnd,
 															 unsigned short timeSegmentIndex,
 															 unsigned short pageIndex,
 															 unsigned int windowIndex,
 															 char* fileName,
 															 NP_TXTFILE_INFO propInfo);
-//��ָ�����ŷ���ָ��ʱ���ָ��ҳ���ָ����������ģ��ʱ��
-//programHwnd����Ҫ����ģ��ʱ�ӵĲ��ŷ���������
-//timeSegmentIndex�����ŷ�������Ҫ����ģ��ʱ�ӵĴ������ڵ�ʱ�����������0��ʼ��
-//pageIndex�����ŷ�������Ҫ����ģ��ʱ�ӵĴ������ڵ�ҳ����������0��ʼ��
-//windowIndex�����ŷ�������Ҫ����ģ��ʱ�ӵĴ�����������0��ʼ��
-//propInfo��ģ��ʱ�ӵĲ��Ų���
-//����ֵ������ģ��ʱ�ӵĽ�������ΪTrue���ʾ���ӳɹ�����������ʧ��
+//给指定播放方案指定时间段指定页面的指定窗口添加模拟时钟
+//programHwnd：需要添加模拟时钟的播放方案对象句柄
+//timeSegmentIndex：播放方案中需要添加模拟时钟的窗口所在的时间段索引（从0开始）
+//pageIndex：播放方案中需要添加模拟时钟的窗口所在的页面索引（从0开始）
+//windowIndex：播放方案中需要添加模拟时钟的窗口索引（从0开始）
+//propInfo：模拟时钟的播放参数
+//返回值：添加模拟时钟的结果，如果为True则表示添加成功，否则添加失败
 extern "C" __declspec(dllexport)bool __stdcall NP_AddAnalogClock(HANDLE programHwnd,
 																 unsigned short timeSegmentIndex,
 																 unsigned short pageIndex,
 																 unsigned int windowIndex,
 																 NP_ANALOGCLOCK_INFO propInfo);
-//��ָ�����ŷ���ָ��ʱ���ָ��ҳ���ָ��������������ʱ��
-//programHwnd����Ҫ��������ʱ�ӵĲ��ŷ���������
-//timeSegmentIndex�����ŷ�������Ҫ��������ʱ�ӵĴ������ڵ�ʱ�����������0��ʼ��
-//pageIndex�����ŷ�������Ҫ��������ʱ�ӵĴ������ڵ�ҳ����������0��ʼ��
-//windowIndex�����ŷ�������Ҫ��������ʱ�ӵĴ�����������0��ʼ��
-//propInfo������ʱ�ӵĲ��Ų���
-//����ֵ����������ʱ�ӵĽ�������ΪTrue���ʾ���ӳɹ�����������ʧ��
+//给指定播放方案指定时间段指定页面的指定窗口添加数字时钟
+//programHwnd：需要添加数字时钟的播放方案对象句柄
+//timeSegmentIndex：播放方案中需要添加数字时钟的窗口所在的时间段索引（从0开始）
+//pageIndex：播放方案中需要添加数字时钟的窗口所在的页面索引（从0开始）
+//windowIndex：播放方案中需要添加数字时钟的窗口索引（从0开始）
+//propInfo：数字时钟的播放参数
+//返回值：添加数字时钟的结果，如果为True则表示添加成功，否则添加失败
 extern "C" __declspec(dllexport)bool __stdcall NP_AddDigitalClock(HANDLE programHwnd,
 																  unsigned short timeSegmentIndex,
 																  unsigned short pageIndex,
 																  unsigned int windowIndex,
 																  NP_DIGITALCLOCK_INFO propInfo);
-//��ָ�����ŷ���ָ��ʱ���ָ��ҳ���ָ���������ӵ����ı�
-//programHwnd����Ҫ���ӵ����ı��Ĳ��ŷ���������
-//timeSegmentIndex�����ŷ�������Ҫ���ӵ����ı��Ĵ������ڵ�ʱ�����������0��ʼ��
-//pageIndex�����ŷ�������Ҫ���ӵ����ı��Ĵ������ڵ�ҳ����������0��ʼ��
-//windowIndex�����ŷ�������Ҫ���ӵ����ı��Ĵ�����������0��ʼ��
-//propInfo�������ı��Ĳ��Ų���
-//����ֵ�����ӵ����ı��Ľ�������ΪTrue���ʾ���ӳɹ�����������ʧ��
+//给指定播放方案指定时间段指定页面的指定窗口添加单行文本
+//programHwnd：需要添加单行文本的播放方案对象句柄
+//timeSegmentIndex：播放方案中需要添加单行文本的窗口所在的时间段索引（从0开始）
+//pageIndex：播放方案中需要添加单行文本的窗口所在的页面索引（从0开始）
+//windowIndex：播放方案中需要添加单行文本的窗口索引（从0开始）
+//propInfo：单行文本的播放参数
+//返回值：添加单行文本的结果，如果为True则表示添加成功，否则添加失败
 extern "C" __declspec(dllexport)bool __stdcall NP_AddSingleLineText(HANDLE programHwnd,
 																	unsigned short timeSegmentIndex,
 																	unsigned short pageIndex,
 																	unsigned int windowIndex,
 																	NP_SINGLELINETEXT_INFO propInfo);
-//��ָ�����ŷ���ָ��ʱ���ָ��ҳ���ָ����������������
-//programHwnd����Ҫ���������ƵĲ��ŷ���������
-//timeSegmentIndex�����ŷ�������Ҫ���������ƵĴ������ڵ�ʱ�����������0��ʼ��
-//pageIndex�����ŷ�������Ҫ���������ƵĴ������ڵ�ҳ����������0��ʼ��
-//windowIndex�����ŷ�������Ҫ���������ƵĴ�����������0��ʼ��
-//propInfo�������ƵĲ��Ų���
-//����ֵ�����������ƵĽ�������ΪTrue���ʾ���ӳɹ�����������ʧ��
+//给指定播放方案指定时间段指定页面的指定窗口添加走马灯
+//programHwnd：需要添加走马灯的播放方案对象句柄
+//timeSegmentIndex：播放方案中需要添加走马灯的窗口所在的时间段索引（从0开始）
+//pageIndex：播放方案中需要添加走马灯的窗口所在的页面索引（从0开始）
+//windowIndex：播放方案中需要添加走马灯的窗口索引（从0开始）
+//propInfo：走马灯的播放参数
+//返回值：添加走马灯的结果，如果为True则表示添加成功，否则添加失败
 extern "C" __declspec(dllexport)bool __stdcall NP_AddScrollingText(HANDLE programHwnd,
 																   unsigned short timeSegmentIndex,
 																   unsigned short pageIndex,
 																   unsigned int windowIndex,
 																   NP_SCROLLTEXT_INFO propInfo);
-//��ָ�����ŷ���ָ��ʱ���ָ��ҳ���ָ���������Ӿ�̬�ı�
-//programHwnd����Ҫ���Ӿ�̬�ı��Ĳ��ŷ���������
-//timeSegmentIndex�����ŷ�������Ҫ���Ӿ�̬�ı��Ĵ������ڵ�ʱ�����������0��ʼ��
-//pageIndex�����ŷ�������Ҫ���Ӿ�̬�ı��Ĵ������ڵ�ҳ����������0��ʼ��
-//windowIndex�����ŷ�������Ҫ���Ӿ�̬�ı��Ĵ�����������0��ʼ��
-//propInfo����̬�ı��Ĳ��Ų���
-//����ֵ�����Ӿ�̬�ı��Ľ�������ΪTrue���ʾ���ӳɹ�����������ʧ��
+//给指定播放方案指定时间段指定页面的指定窗口添加静态文本
+//programHwnd：需要添加静态文本的播放方案对象句柄
+//timeSegmentIndex：播放方案中需要添加静态文本的窗口所在的时间段索引（从0开始）
+//pageIndex：播放方案中需要添加静态文本的窗口所在的页面索引（从0开始）
+//windowIndex：播放方案中需要添加静态文本的窗口索引（从0开始）
+//propInfo：静态文本的播放参数
+//返回值：添加静态文本的结果，如果为True则表示添加成功，否则添加失败
 extern "C" __declspec(dllexport)bool __stdcall NP_AddStaticText(HANDLE programHwnd,
 																unsigned short timeSegmentIndex,
 																unsigned short pageIndex,
 																unsigned int windowIndex,
 																NP_STATICTEXT_INFO propInfo);
-//��ָ�����ŷ���ָ��ʱ���ָ��ҳ���ָ��������������Ԥ��
-//programHwnd����Ҫ��������Ԥ���Ĳ��ŷ���������
-//timeSegmentIndex�����ŷ�������Ҫ��������Ԥ���Ĵ������ڵ�ʱ�����������0��ʼ��
-//pageIndex�����ŷ�������Ҫ��������Ԥ���Ĵ������ڵ�ҳ����������0��ʼ��
-//windowIndex�����ŷ�������Ҫ��������Ԥ���Ĵ�����������0��ʼ��
-//propInfo������Ԥ���Ĳ��Ų���
-//����ֵ����������Ԥ���Ľ�������ΪTrue���ʾ���ӳɹ�����������ʧ��
+//给指定播放方案指定时间段指定页面的指定窗口添加天气预报
+//programHwnd：需要添加天气预报的播放方案对象句柄
+//timeSegmentIndex：播放方案中需要添加天气预报的窗口所在的时间段索引（从0开始）
+//pageIndex：播放方案中需要添加天气预报的窗口所在的页面索引（从0开始）
+//windowIndex：播放方案中需要添加天气预报的窗口索引（从0开始）
+//propInfo：天气预报的播放参数
+//返回值：添加天气预报的结果，如果为True则表示添加成功，否则添加失败
 extern "C" __declspec(dllexport)bool __stdcall NP_AddWeather(HANDLE programHwnd,
 															 unsigned short timeSegmentIndex,
 															 unsigned short pageIndex,
 															 unsigned int windowIndex,
 															 NP_WEATHER_INFO propInfo);
-//�Ƴ�ָ�����ŷ���ָ��ʱ���ָ��ҳ��ָ�����ڵ�ָ��ý��
-//programHwnd����Ҫ�Ƴ�ý��Ĳ��ŷ���������
-//timeSegmentIndex����Ҫ�Ƴ���ý�����ڵ�ʱ�����������0��ʼ��
-//pageIndex����Ҫ�Ƴ���ý�����ڵ�ҳ����������0��ʼ��
-//windowIndex����Ҫ�Ƴ���ý�����ڵĴ�����������0��ʼ��
-//mediaIndex����Ҫ�Ƴ���ý���ڵ�ǰ�����е�����
-//����ֵ���Ƴ�ý��Ľ�������ΪTrue���ʾ�Ƴ��ɹ��������Ƴ�ʧ��
+//移除指定播放方案指定时间段指定页面指定窗口的指定媒体
+//programHwnd：需要移除媒体的播放方案对象句柄
+//timeSegmentIndex：需要移除的媒体所在的时间段索引（从0开始）
+//pageIndex：需要移除的媒体所在的页面索引（从0开始）
+//windowIndex：需要移除的媒体所在的窗口索引（从0开始）
+//mediaIndex：需要移除的媒体在当前窗口中的索引
+//返回值：移除媒体的结果，如果为True则表示移除成功，否则移除失败
 extern "C" __declspec(dllexport)bool __stdcall NP_RemoveMedia(HANDLE programHwnd,
 															  unsigned short timeSegmentIndex,
 															  unsigned short pageIndex,
 															  unsigned int windowIndex,
 															  unsigned int mediaIndex);
-//�Ƴ�ָ�����ŷ���ָ��ʱ���ָ��ҳ���ָ������
-//programHwnd����Ҫ�Ƴ����ڵĲ��ŷ���������
-//timeSegmentIndex����Ҫ�Ƴ��Ĵ������ڵ�ʱ�����������0��ʼ��
-//pageIndex����Ҫ�Ƴ��Ĵ������ڵ�ҳ����������0��ʼ��
-//windowIndex����Ҫ�Ƴ��Ĵ�����������0��ʼ��
-//����ֵ���Ƴ����ڵĽ�������ΪTrue���ʾ�Ƴ��ɹ��������Ƴ�ʧ��
-//��ע������Ƴ����ڣ���ô��������ӵ�ý��Ҳ�ᱻ�Ƴ���
+//移除指定播放方案指定时间段指定页面的指定窗口
+//programHwnd：需要移除窗口的播放方案对象句柄
+//timeSegmentIndex：需要移除的窗口所在的时间段索引（从0开始）
+//pageIndex：需要移除的窗口所在的页面索引（从0开始）
+//windowIndex：需要移除的窗口索引（从0开始）
+//返回值：移除窗口的结果，如果为True则表示移除成功，否则移除失败
+//备注：如果移除窗口，则该窗口上添加的媒体也会被移除。
 extern "C" __declspec(dllexport)bool __stdcall NP_RemoveWindow(HANDLE programHwnd,
 															   unsigned short timeSegmentIndex,
 															   unsigned short pageIndex,
 															   unsigned int windowIndex);
-//�Ƴ�ָ�����ŷ���ָ��ʱ��ε�ָ��ҳ��
-//programHwnd����Ҫ�Ƴ�ҳ��Ĳ��ŷ���������
-//timeSegmentIndex����Ҫ�Ƴ���ҳ�����ڵ�ʱ�����������0��ʼ��
-//pageIndex����Ҫ�Ƴ���ҳ����������0��ʼ��
-//����ֵ���Ƴ�ҳ��Ľ�������ΪTrue���ʾ�Ƴ��ɹ��������Ƴ�ʧ��
-//��ע������Ƴ�ҳ�棬���ҳ���ϵĴ��ڼ��䴰�������ӵ�ý��Ҳ�ᱻ�Ƴ���
+//移除指定播放方案指定时间段的指定页面
+//programHwnd：需要移除页面的播放方案对象句柄
+//timeSegmentIndex：需要移除的页面所在的时间段索引（从0开始）
+//pageIndex：需要移除的页面索引（从0开始）
+//返回值：移除页面的结果，如果为True则表示移除成功，否则移除失败
+//备注：如果移除页面，则该页面上的窗口及其窗口上添加的媒体也会被移除。
 extern "C" __declspec(dllexport)bool __stdcall NP_RemovePage(HANDLE programHwnd,
 															 unsigned short timeSegmentIndex,
 															 unsigned short pageIndex);
-//�Ƴ�ָ�����ŷ�����ָ��ʱ���
-//programHwnd����Ҫ�Ƴ�ʱ��εĲ��ŷ���������
-//timeSegmentIndex����Ҫ�Ƴ���ʱ�����������0��ʼ��
-//����ֵ���Ƴ�ʱ��εĽ�������ΪTrue���ʾ�Ƴ��ɹ��������Ƴ�ʧ��
-//��ע������Ƴ�ʱ��Σ����ʱ��ε�ҳ�桢ҳ���ϵĴ��ڼ��䴰�������ӵ�ý��Ҳ�ᱻ�Ƴ���
+//移除指定播放方案的指定时间段
+//programHwnd：需要移除时间段的播放方案对象句柄
+//timeSegmentIndex：需要移除的时间段索引（从0开始）
+//返回值：移除时间段的结果，如果为True则表示移除成功，否则移除失败
+//备注：如果移除时间段，则该时间段的页面、页面上的窗口及其窗口上添加的媒体也会被移除。
 extern "C" __declspec(dllexport)bool __stdcall NP_RemoveTimeSegment(HANDLE programHwnd,
 																	unsigned short timeSegmentIndex);
-//����ָ�����ŷ���
-//programHwnd����Ҫ����Ĳ��ŷ���������
-//����ֵ�����沥�ŷ����Ľ�������ΪTrue���ʾ����ɹ������򱣴�ʧ��
+//保存指定播放方案
+//programHwnd：需要保存的播放方案对象句柄
+//返回值：保存播放方案的结果，如果为True则表示保存成功，否则保存失败
 extern "C" __declspec(dllexport)bool __stdcall NP_SavePlayProgram(HANDLE programHwnd);
-//�رմ򿪵Ĳ��ŷ���
-//programHwnd����Ҫ�رյĲ��ŷ���������
-//����ֵ���رղ��ŷ����Ľ�������ΪTrue���ʾ�رճɹ�������ر�ʧ��
+//关闭打开的播放方案
+//programHwnd：需要关闭的播放方案对象句柄
+//返回值：关闭播放方案的结果，如果为True则表示关闭成功，否则关闭失败
 extern "C" __declspec(dllexport)bool __stdcall NP_ClosePlayProgram(HANDLE programHwnd);
-//���Ͳ��ŷ������첽��
-//cardID����Ҫ���ղ��ŷ������첽��ID
-//saveDevice�����ŷ������͵��첽����Ĵ洢�豸��0��ʾ�洢��Flash��1��ʾ�洢��SD����2��ʾ�洢��U��
-//playProgramPath����Ҫ���͵Ĳ��ŷ���ȫ·��
-//����ֵ�����÷��Ͳ��ŷ����������������ΪTrue���ʾ���óɹ����������ʧ��
-//��ע���ӿڷ���True��Ӧ�ó�����ڲ��ŷ���������ɺ��յ�WM_SENDPLAYPROGRAM����Ϣ��
-//      ��ϢIDΪ��ʼ��ʱ���õ���ϢID��WPARAM����ΪWM_SENDPLAYPROGRAM��LPARAM����Ϊ���͵Ľ��
+//发送播放方案到异步卡
+//cardID：需要接收播放方案的异步卡ID
+//saveDevice：播放方案发送到异步卡后的存储设备，0表示存储到Flash，1表示存储到SD卡，2表示存储到U盘
+//playProgramPath：需要发送的播放方案全路径
+//返回值：调用发送播放方案的命令结果，如果为True则表示调用成功，否则调用失败
+//备注：接口返回True后，应用程序会在播放方案发送完成后收到WM_SENDPLAYPROGRAM的消息，
+//      消息ID为初始化时设置的消息ID，WPARAM参数为WM_SENDPLAYPROGRAM，LPARAM参数为发送的结果
 extern "C" __declspec(dllexport)bool __stdcall NP_SendPlayProgram(char* cardID, 
 																  unsigned short saveDevice,
 																  char* playProgramPath);
-//������Ƶ�Ĳ岥���첽��
-//cardID����Ҫ���ղ岥�ļ����첽��ID
-//fileName����Ҫ�岥����Ƶ�ļ�ȫ·��
-//windowSize���岥���ڵĴ�С�����������ߣ�
-//windowSize���岥���ڵĴ�С�����������ߣ�
-//playDuration���岥��Ƶ�Ĳ���ʱ��
-//����ֵ�����÷��Ͳ岥�ļ�����Ľ�������True���ʾ������óɹ��������������ʧ��
-//��ע���ӿڷ���True��Ӧ�ó�����ڲ岥�ļ�������ɺ��յ�WM_SENDINSERTPLAY����Ϣ��
-//      ��ϢIDΪ��ʼ��ʱ���õ���ϢID��WPARAM����ΪWM_SENDINSERTPLAY��LPARAM����Ϊ���͵Ľ��
+//发送视频的插播到异步卡
+//cardID：需要接收插播文件的异步卡ID
+//fileName：需要插播的视频文件全路径
+//windowSize：插播窗口的大小（包含宽、高）
+//windowSize：插播窗口的大小（包含宽、高）
+//playDuration：插播视频的播放时长
+//返回值：调用发送插播文件命令的结果，如果True则表示命令调用成功，否则调用命令失败
+//备注：接口返回True后，应用程序会在插播文件发送完成后收到WM_SENDINSERTPLAY的消息，
+//      消息ID为初始化时设置的消息ID，WPARAM参数为WM_SENDINSERTPLAY，LPARAM参数为发送的结果
 extern "C" __declspec(dllexport)bool __stdcall NP_SendVideoInsertPlay(char* cardID, 
 																	  char* fileName,
 																	  NP_SIZE windowSize,
 																	  NP_TIMESPAN playDuration,
 																	  NP_VIDEOFIEL_INFO propInfo);
-//����ͼƬ�Ĳ岥���첽��
-//cardID����Ҫ���ղ岥�ļ����첽��ID
-//fileName����Ҫ�岥��ͼƬ�ļ�ȫ·��
-//windowSize���岥���ڵĴ�С�����������ߣ�
-//playDuration���岥ͼƬ�Ĳ���ʱ��
-//propInfo���岥ͼƬ�Ĳ��Ų���
-//����ֵ�����÷��Ͳ岥�ļ�����Ľ�������True���ʾ������óɹ��������������ʧ��
-//��ע���ӿڷ���True��Ӧ�ó�����ڲ岥�ļ�������ɺ��յ�WM_SENDINSERTPLAY����Ϣ��
-//      ��ϢIDΪ��ʼ��ʱ���õ���ϢID��WPARAM����ΪWM_SENDINSERTPLAY��LPARAM����Ϊ���͵Ľ��
+//发送图片的插播到异步卡
+//cardID：需要接收插播文件的异步卡ID
+//fileName：需要插播的图片文件全路径
+//windowSize：插播窗口的大小（包含宽、高）
+//playDuration：插播图片的播放时长
+//propInfo：插播图片的播放参数
+//返回值：调用发送插播文件命令的结果，如果True则表示命令调用成功，否则调用命令失败
+//备注：接口返回True后，应用程序会在插播文件发送完成后收到WM_SENDINSERTPLAY的消息，
+//      消息ID为初始化时设置的消息ID，WPARAM参数为WM_SENDINSERTPLAY，LPARAM参数为发送的结果
 extern "C" __declspec(dllexport)bool __stdcall NP_SendImageInsertPlay(char* cardID,
 																	  char* fileName,
 																	  NP_SIZE windowSize,
 																	  NP_TIMESPAN playDuration,
 																	  NP_IMAGEFILE_INFO propInfo);
-//���;�̬�ı���֪ͨ���첽��
-//cardID����Ҫ����֪ͨ�ļ����첽��ID
-//windowRect��֪ͨ������ʾ�Ĵ������򣨰���λ�úʹ�С��
-//playTimes����̬�ı��Ĳ��Ŵ���
-//propInfo����̬�ı��Ĳ��Ų���
-//����ֵ�����÷���֪ͨ�ļ�����Ľ�������True���ʾ������óɹ��������������ʧ��
-//��ע���ӿڷ���True��Ӧ�ó������֪ͨ�ļ�������ɺ��յ�WM_SENDNOTIFICATION����Ϣ��
-//      ��ϢIDΪ��ʼ��ʱ���õ���ϢID��WPARAM����ΪWM_SENDNOTIFICATION��LPARAM����Ϊ���͵Ľ��
+//发送静态文本的通知到异步卡
+//cardID：需要接收通知文件的异步卡ID
+//windowRect：通知内容显示的窗口区域（包括位置和大小）
+//playTimes：静态文本的播放次数
+//propInfo：静态文本的播放参数
+//返回值：调用发送通知文件命令的结果，如果True则表示命令调用成功，否则调用命令失败
+//备注：接口返回True后，应用程序会在通知文件发送完成后收到WM_SENDNOTIFICATION的消息，
+//      消息ID为初始化时设置的消息ID，WPARAM参数为WM_SENDNOTIFICATION，LPARAM参数为发送的结果
 extern "C" __declspec(dllexport)bool __stdcall NP_SendStaticTextNotify(char* cardID,
 																	   NP_RECTANGLE windowRect,
 																	   unsigned int playTimes,
 																	   NP_STATICTEXT_INFO propInfo);
-//���������Ƶ�֪ͨ���첽��
-//cardID����Ҫ����֪ͨ�ļ����첽��ID
-//windowRect��֪ͨ������ʾ�Ĵ������򣨰���λ�úʹ�С��
-//playTimes�������ƵĲ��Ŵ���
-//propInfo�������ƵĲ��Ų���
-//����ֵ�����÷���֪ͨ�ļ�����Ľ�������True���ʾ������óɹ��������������ʧ��
-//��ע���ӿڷ���True��Ӧ�ó������֪ͨ�ļ�������ɺ��յ�WM_SENDNOTIFICATION����Ϣ��
-//      ��ϢIDΪ��ʼ��ʱ���õ���ϢID��WPARAM����ΪWM_SENDNOTIFICATION��LPARAM����Ϊ���͵Ľ��
+//发送走马灯的通知到异步卡
+//cardID：需要接收通知文件的异步卡ID
+//windowRect：通知内容显示的窗口区域（包括位置和大小）
+//playTimes：走马灯的播放次数
+//propInfo：走马灯的播放参数
+//返回值：调用发送通知文件命令的结果，如果True则表示命令调用成功，否则调用命令失败
+//备注：接口返回True后，应用程序会在通知文件发送完成后收到WM_SENDNOTIFICATION的消息，
+//      消息ID为初始化时设置的消息ID，WPARAM参数为WM_SENDNOTIFICATION，LPARAM参数为发送的结果
 extern "C" __declspec(dllexport)bool __stdcall NP_SendSrollingTextNotify(char* cardID,
 																		 NP_RECTANGLE windowRect,
 																		 unsigned int playTimes,
 																		 NP_SCROLLTEXT_INFO propInfo);
-//���͵����ı���֪ͨ���첽��
-//cardID����Ҫ����֪ͨ�ļ����첽��ID
-//windowRect��֪ͨ������ʾ�Ĵ������򣨰���λ�úʹ�С��
-//playTimes�������ı��Ĳ��Ŵ���
-//propInfo�������ı��Ĳ��Ų���
-//����ֵ�����÷���֪ͨ�ļ�����Ľ�������True���ʾ������óɹ��������������ʧ��
-//��ע���ӿڷ���True��Ӧ�ó������֪ͨ�ļ�������ɺ��յ�WM_SENDNOTIFICATION����Ϣ��
-//      ��ϢIDΪ��ʼ��ʱ���õ���ϢID��WPARAM����ΪWM_SENDNOTIFICATION��LPARAM����Ϊ���͵Ľ��
+//发送单行文本的通知到异步卡
+//cardID：需要接收通知文件的异步卡ID
+//windowRect：通知内容显示的窗口区域（包括位置和大小）
+//playTimes：单行文本的播放次数
+//propInfo：单行文本的播放参数
+//返回值：调用发送通知文件命令的结果，如果True则表示命令调用成功，否则调用命令失败
+//备注：接口返回True后，应用程序会在通知文件发送完成后收到WM_SENDNOTIFICATION的消息，
+//      消息ID为初始化时设置的消息ID，WPARAM参数为WM_SENDNOTIFICATION，LPARAM参数为发送的结果
 extern "C" __declspec(dllexport)bool __stdcall NP_SendSingleLineTextNotify(char* cardID, 
 																		   NP_RECTANGLE windowRect,
 																		   unsigned int playTimes,
 																		   NP_SINGLELINETEXT_INFO propInfo);
-//�����첽���Ĳ���
-//cardID����Ҫ���Ƶ��첽��ID
-//ctrlMode���������ͣ�0��ʾ���ţ�Ϊ1��ʾ��ͣ��Ϊ2��ʾֹͣ
-//����ֵ�����Ʋ��ŵĽ�������True���ʾ���Ƴɹ����������ʧ��
+//控制异步卡的播放
+//cardID：需要控制的异步卡ID
+//ctrlMode：控制类型，0表示播放，为1表示暂停，为2表示停止
+//返回值：控制播放的结果，如果True则表示控制成功，否则控制失败
 extern "C" __declspec(dllexport)bool __stdcall NP_ControlCardPlay(char* cardID, unsigned short ctrlMode);
-//��ȡ�첽��������־
-//cardID����Ҫ��ȡ��־���첽��ID
-//getDate����Ҫ��ȡ����־������
-//����ֵ�����û�ȡ��־����Ľ�������True���ʾ���óɹ����������ʧ��
-//��ע��1.�ӿڷ���True��Ӧ�ó��������־��ȡ�ɹ����յ�WM_GETPLAYLOGOK����Ϣ��
-//        ��ϢIDΪ��ʼ��ʱ���õ���ϢID��WPARAM����ΪWM_GETPLAYLOGOK��
-//        LPARAM����Ϊ��ȡ������־�洢��ȫ·����
-//      2.�ӿڷ���True��Ӧ�ó��������־��ȡʧ�ܺ��յ�WM_GETPLAYLOGERROR����Ϣ��
-//        ��ϢIDΪ��ʼ��ʱ���õ���ϢID��WPARAM����ΪWM_GETPLAYLOGERROR��
-//        LPARAM����Ϊ��ȡ��־ʧ�ܵ�ԭ��
+//获取异步卡播放日志
+//cardID：需要获取日志的异步卡ID
+//getDate：需要获取的日志的日期
+//返回值：调用获取日志命令的结果，如果True则表示调用成功，否则调用失败
+//备注：1.接口返回True后，应用程序会在日志获取成功后收到WM_GETPLAYLOGOK的消息，
+//        消息ID为初始化时设置的消息ID，WPARAM参数为WM_GETPLAYLOGOK，
+//        LPARAM参数为获取到的日志存储的全路径。
+//      2.接口返回True后，应用程序会在日志获取失败后收到WM_GETPLAYLOGERROR的消息，
+//        消息ID为初始化时设置的消息ID，WPARAM参数为WM_GETPLAYLOGERROR，
+//        LPARAM参数为获取日志失败的原因
 extern "C" __declspec(dllexport)bool __stdcall NP_GetCardPlayLog(char* cardID, NP_DATE getDate);
-//��ָ����־
-//logFileName����Ҫ�򿪵���־��ȫ·��
-//����ֵ���򿪵���־���������������־ʧ�ܣ��򷵻�NULL
+//打开指定日志
+//logFileName：需要打开的日志的全路径
+//返回值：打开的日志对象句柄，如果打开日志失败，则返回NULL
 extern "C" __declspec(dllexport)HANDLE __stdcall NP_OpenPlayLogFile(char* logFileName);
-//��ȡָ����־����Ϣ�ĸ���
-//logHandle����Ҫ��ȡ��Ϣ��������־������
-//����ֵ����ȡ������Ϣ�����������ȡʧ����Ϊ0
+//获取指定日志中信息的个数
+//logHandle：需要获取信息个数的日志对象句柄
+//返回值：获取到的信息个数，如果获取失败则为0
 extern "C" __declspec(dllexport)int __stdcall NP_GetPlayLogItemCount(HANDLE logHandle);
-///��ȡָ����־��ָ������Ϣ
-//logHandle����Ҫ��ȡ��Ϣ����־������
-//itemIndex����Ҫ��ȡ����Ϣ����Ϣ�б��е���������0��ʼ��
-//logInfo����ȡ������־��Ϣָ��
-//����ֵ����ȡ��־��Ϣ�Ľ���������ȡ�ɹ����򷵻�True����logInfoΪ��ȡ����Ϣ��ָ�룬���򷵻�False��
-//��ע�����ָ����־��ָ����������Ϣ�����ڣ��򷵻�False
+///获取指定日志中指定的信息
+//logHandle：需要获取信息的日志对象句柄
+//itemIndex：需要获取的信息在信息列表中的索引（从0开始）
+//logInfo：获取到的日志信息指针
+//返回值：获取日志信息的结果，如果获取成功，则返回True，且logInfo为获取到信息的指针，否则返回False。
+//备注：如果指定日志或指定索引的信息不存在，则返回False
 extern "C" __declspec(dllexport)bool __stdcall NP_GetPlayLogItemInfo(HANDLE logHandle, 
 																	 int itemIndex,
 																	 NP_PLAYLOG_ITEM* logInfo);
-//�رմ򿪵���־�ļ�
-//logHandle����Ҫ�رյ���־������
-//����ֵ���ر���־�Ľ�����������True���ʾ�رճɹ�������ر�ʧ��
+//关闭打开的日志文件
+//logHandle：需要关闭的日志对象句柄
+//返回值：关闭日志的结果，如果返回True则表示关闭成功，否则关闭失败
 extern "C" __declspec(dllexport)bool __stdcall NP_ClosePlayLogFile(HANDLE logHandle);
 
 
-//�����첽����ϵͳʱ��
-//cardID����Ҫ����ʱ����첽��ID
-//time����Ҫ���õ�ʱ��
-//����ֵ�������첽��ʱ��Ľ�����������True���ʾ���óɹ�����������ʧ��
-//��ע���ýӿڵ�ִ����Ҫ�ϳ�ʱ�䣨1-2�룩��
+//设置异步卡的系统时间
+//cardID：需要设置时间的异步卡ID
+//time：需要设置的时间
+//返回值：设置异步卡时间的结果，如果返回True则表示设置成功，否则设置失败
+//备注：该接口的执行需要较长时间（1-2秒）。
 extern "C" __declspec(dllexport)bool __stdcall NP_SetCardSystemTime(char* cardID, SYSTEMTIME time);
-//��ȡ�첽����ϵͳʱ��
-//cardID����Ҫ��ȡʱ����첽��ID
-//time����ȡ�����첽��ʱ��
-//����ֵ����ȡ�첽��ʱ��Ľ�����������True���ʾ��ȡ�ɹ��������ȡʧ��
+//获取异步卡的系统时间
+//cardID：需要获取时间的异步卡ID
+//time：获取到的异步卡时间
+//返回值：获取异步卡时间的结果，如果返回True则表示获取成功，否则获取失败
 extern "C" __declspec(dllexport)bool __stdcall NP_GetCardSystemTime(char* cardID, SYSTEMTIME* time);
 
-//�����첽��������ֵ
-//cardID����Ҫ��������ֵ���첽��ID
-//brightValue����Ҫ���õ�����ֵ(0-255)
-//����ֵ�������첽������ֵ�Ľ�����������True���ʾ���óɹ�����������ʧ��
+//设置异步卡的亮度值
+//cardID：需要设置亮度值的异步卡ID
+//brightValue：需要设置的亮度值(0-255)
+//返回值：设置异步卡亮度值的结果，如果返回True则表示设置成功，否则设置失败
 extern "C" __declspec(dllexport)bool __stdcall NP_SetCardBrightValue(char* cardID, BYTE brightValue);
-//��ȡ�첽��������ֵ
-//cardID����Ҫ��ȡ����ֵ���첽��ID
-//brightValue����ȡ�����첽������ֵ(0-255)
-//����ֵ�������ȡ�ɹ����򷵻�True����brightValueΪ��ȡ��������ֵ�����򷵻�False��
+//获取异步卡的亮度值
+//cardID：需要获取亮度值的异步卡ID
+//brightValue：获取到的异步卡亮度值(0-255)
+//返回值：如果获取成功，则返回True，且brightValue为获取到的亮度值，否则返回False。
 extern "C" __declspec(dllexport)bool __stdcall NP_GetCardBrightValue(char* cardID, BYTE* brightValue);
 
-//�����첽��������ģʽ
-//cardID����Ҫ��������ģʽ���첽��ID
-//brightMode����Ҫ���õ�����ģʽ��0��ʾ�Զ����ȣ�1��ʾ�ֶ����ȣ�2��ʾ��ʱ
-//����ֵ�������첽������ģʽ�Ľ�����������True���ʾ���óɹ�����������ʧ��
+//设置异步卡的亮度模式
+//cardID：需要设置亮度模式的异步卡ID
+//brightMode：需要设置的亮度模式：0表示自动亮度，1表示手动亮度，2表示定时
+//返回值：设置异步卡亮度模式的结果，如果返回True则表示设置成功，否则设置失败
 extern "C" __declspec(dllexport)bool __stdcall NP_SetCardBrightMode(char* cardID, unsigned char brightMode);
-//��ȡ�첽��������ģʽ
-//cardID����Ҫ��ȡ����ģʽ���첽��ID
-//brightMode����ȡ�����첽������ģʽ
-//����ֵ�������ȡ�ɹ����򷵻�True����brightModeΪ��ȡ��������ģʽ
-//       ��0��ʾ�Զ����ȣ�1��ʾ�ֶ����ȣ�2��ʾ��ʱ���ȣ������򷵻�False��
+//获取异步卡的亮度模式
+//cardID：需要获取亮度模式的异步卡ID
+//brightMode：获取到的异步卡亮度模式
+//返回值：如果获取成功，则返回True，且brightMode为获取到的亮度模式
+//       （0表示自动亮度，1表示手动亮度，2表示定时亮度），否则返回False。
 extern "C" __declspec(dllexport)bool __stdcall NP_GetCardBrightMode(char* cardID, unsigned char* brightMode);
 
-//�����첽������Ļ״̬
-//cardID����Ҫ������Ļ״̬���첽��ID
-//screenStatus����Ҫ���õ���Ļ״̬��0��ʾ������ʾ��1��ʾ������
-//����ֵ�������첽����Ļ״̬�Ľ�����������True���ʾ���óɹ�����������ʧ��
+//设置异步卡的屏幕状态
+//cardID：需要设置屏幕状态的异步卡ID
+//screenStatus：需要设置的屏幕状态：0表示正常显示，1表示黑屏。
+//返回值：设置异步卡屏幕状态的结果，如果返回True则表示设置成功，否则设置失败
 extern "C" __declspec(dllexport)bool __stdcall NP_SetCardSreenStatus(char* cardID, unsigned char screenStatus);
 
-//��ȡ��ʾ���е��������
-//cardID����Ҫ��ȡ����������첽��ID
-//cabinetCnt����ȡ�����������
-//����ֵ����ȡ��������Ľ���������ȡ�ɹ����򷵻�True����cabinetCntΪ��ȡ����������������򷵻�False��
+//获取显示屏中的箱体个数
+//cardID：需要获取箱体个数的异步卡ID
+//cabinetCnt：获取到的箱体个数
+//返回值：获取箱体个数的结果，如果获取成功，则返回True，且cabinetCnt为获取到的箱体个数，否则返回False。
 extern "C" __declspec(dllexport)bool __stdcall NP_GetCabinetCount(char* cardID, unsigned short* cabinetCnt);
-//��ʼ���
-//cardID����Ҫ�����첽��ID
-//cabinetIndex����Ҫ����������������0��ʼ��
-//detectPointPara�����ʱ��Ҫ�Ĳ���
-//����ֵ�����͵������Ľ�����������True�����ʾ���͵������ɹ��������ʾ���͵������ʧ�ܡ�
-//��ע��1.�ӿڷ���True��Ӧ�ó�����ڵ��ɹ����յ�WM_DETECTPOINTOK����Ϣ��
-//        ��ϢIDΪ��ʼ��ʱ���õ���ϢID��WPARAM����ΪWM_DETECTPOINTOK��
-//        LPARAM����Ϊ���������ָ�롣
-//      2.�ӿڷ���True��Ӧ�ó�����ڵ��ʧ�ܺ��յ�WM_DETECTPOINTFAILED����Ϣ��
-//        ��ϢIDΪ��ʼ��ʱ���õ���ϢID��WPARAM����ΪWM_DETECTPOINTFAILED��
-//        LPARAM����Ϊ���ʧ�ܵ�ԭ��
+//开始点检
+//cardID：需要点检的异步卡ID
+//cabinetIndex：需要点检的箱体索引（从0开始）
+//detectPointPara：点检时需要的参数
+//返回值：发送点检命令的结果，如果返回True，则表示发送点检命令成功，否则表示发送点检命令失败。
+//备注：1.接口返回True后，应用程序会在点检成功后收到WM_DETECTPOINTOK的消息，
+//        消息ID为初始化时设置的消息ID，WPARAM参数为WM_DETECTPOINTOK，
+//        LPARAM参数为点检结果数据指针。
+//      2.接口返回True后，应用程序会在点检失败后收到WM_DETECTPOINTFAILED的消息，
+//        消息ID为初始化时设置的消息ID，WPARAM参数为WM_DETECTPOINTFAILED，
+//        LPARAM参数为点检失败的原因
 extern "C" __declspec(dllexport)bool __stdcall NP_BeginDetectPoint(char* cardID, 
 																   unsigned short cabinetIndex, 
 																   NP_DETECTPOINT_PARA detectPointPara);
-//�����첽��
-//cardID����Ҫ�������첽��ID
-//����ֵ�������ն˵Ľ�����������True�����ʾ�����ɹ��������ʾ����ʧ�ܡ�
+//重启异步卡
+//cardID：需要重启的异步卡ID
+//返回值：重启终端的结果，如果返回True，则表示重启成功，否则表示重启失败。
 extern "C" __declspec(dllexport)bool __stdcall NP_RestartCard(char* cardID);
-//ˢ���첽���ļ����Ϣ
-//cardID����Ҫˢ�¼����Ϣ���첽��ID
-//monitorInfoSavePath:ˢ�µ��ļ����Ϣ��PC���ϵĴ洢·�����洢�ļ��У���
-//����ֵ������ˢ�¼����Ϣ����Ľ�����������True�����ʾ��������ɹ��������ʾ����ˢ�¼����Ϣ����ʧ�ܡ�
-//��ע��1.�ӿڷ���True��Ӧ�ó������ˢ�¼�سɹ����յ�WM_REFRESHMONITOROK����Ϣ��
-//        ��ϢIDΪ��ʼ��ʱ���õ���ϢID��WPARAM����ΪWM_REFRESHMONITOROK��
-//        LPARAM����Ϊ�����Ϣ�洢�ļ�ȫ·����ָ�롣
-//      2.�ӿڷ���True��Ӧ�ó������ˢ�¼��ʧ�ܺ��յ�WM_REFRESHMONITORFAILED����Ϣ��
-//        ��ϢIDΪ��ʼ��ʱ���õ���ϢID��WPARAM����ΪWM_REFRESHMONITORFAILED��
-//        LPARAM����Ϊˢ�¼������ʧ�ܵ�ԭ��
+//刷新异步卡的监控信息
+//cardID：需要刷新监控信息的异步卡ID
+//monitorInfoSavePath:刷新到的监控信息在PC机上的存储路径（存储文件夹）。
+//返回值：发送刷新监控信息命令的结果。如果返回True，则表示发送命令成功，否则表示发送刷新监控信息命令失败。
+//备注：1.接口返回True后，应用程序会在刷新监控成功后收到WM_REFRESHMONITOROK的消息，
+//        消息ID为初始化时设置的消息ID，WPARAM参数为WM_REFRESHMONITOROK，
+//        LPARAM参数为监控信息存储文件全路径的指针。
+//      2.接口返回True后，应用程序会在刷新监控失败后收到WM_REFRESHMONITORFAILED的消息，
+//        消息ID为初始化时设置的消息ID，WPARAM参数为WM_REFRESHMONITORFAILED，
+//        LPARAM参数为刷新监控数据失败的原因
 extern "C" __declspec(dllexport)bool __stdcall NP_RefreshCardMonitorInfo(char* cardID, char* monitorInfoSavePath);
-//�򿪼����Ϣ�洢�ļ�
-//monitoInfoFileName�������Ϣ�洢�ļ���ȫ·��
-//����ֵ���򿪵ļ����Ϣ�ļ������������ļ�ʧ�ܣ��򷵻�NULL
+//打开监控信息存储文件
+//monitoInfoFileName：监控信息存储文件的全路径
+//返回值：打开的监控信息文件句柄，如果打开文件失败，则返回NULL
 extern "C" __declspec(dllexport)HANDLE __stdcall NP_OpenMonitorInfoFile(char* monitoInfoFileName);
-//��ȡָ�������Ϣ�洢�ļ��е���Ϣ����
-//hMonitorFile����Ҫ��ȡ��Ϣ�����ļ����Ϣ�ļ�������
-//����ֵ����ȡ������Ϣ�����������ȡʧ����Ϊ0
+//获取指定监控信息存储文件中的信息个数
+//hMonitorFile：需要获取信息个数的监控信息文件对象句柄
+//返回值：获取到的信息个数，如果获取失败则为0
 extern "C" __declspec(dllexport)int __stdcall NP_GetInfoCntFromFile(HANDLE hMonitorFile);
-///��ȡָ�������Ϣ�洢�ļ���ָ���ļ����Ϣ
-//hMonitorFile����Ҫ��ȡ��Ϣ�ļ����Ϣ�ļ�������
-//infoIndex����Ҫ��ȡ�ļ����Ϣ����Ϣ�б��е���������0��ʼ��
-//monitorInfo����ȡ���ļ����Ϣָ��
-//����ֵ����ȡ�����Ϣ�Ľ���������ȡ�ɹ����򷵻�True����monitorInfoΪ��ȡ����Ϣ��ָ�룬���򷵻�False��
-//��ע�����ָ����������Ϣ�����ڣ��򷵻�False
+///获取指定监控信息存储文件中指定的监控信息
+//hMonitorFile：需要获取信息的监控信息文件对象句柄
+//infoIndex：需要获取的监控信息在信息列表中的索引（从0开始）
+//monitorInfo：获取到的监控信息指针
+//返回值：获取监控信息的结果，如果获取成功，则返回True，且monitorInfo为获取到信息的指针，否则返回False。
+//备注：如果指定索引的信息不存在，则返回False
 extern "C" __declspec(dllexport)bool __stdcall NP_GetMonitorInfoFromFile(HANDLE hMonitorFile, 
 																		 int infoIndex,
 																		 NP_MONITOR_INFO* monitorInfo);
-//�رռ����Ϣ�洢�ļ�
-//hMonitorFile����Ҫ�رյļ����Ϣ�洢�ļ�������
-//����ֵ���رռ����Ϣ�洢�ļ��Ľ��������رճɹ����򷵻�True�����򷵻�False��
+//关闭监控信息存储文件
+//hMonitorFile：需要关闭的监控信息存储文件对象句柄
+//返回值：关闭监控信息存储文件的结果，如果关闭成功，则返回True，否则返回False。
 extern "C" __declspec(dllexport)bool __stdcall NP_CloseMonitoInfoFile(HANDLE hMonitorFile);
-//�����첽��ͨѶ״̬��⹦���Ƿ���
-//cardID�� ��Ҫ����ͨѶ״̬��⹦���Ƿ������첽��ID
-//isEanble���Ƿ���ͨѶ״̬��⹦�ܣ����������ΪTrue������ΪFalse
-//����ֵ������ͨѶ״̬��⹦���Ƿ����Ľ����������óɹ����򷵻�True�����򷵻�False��
-//��ע���첽��ͨѶ״̬��⹦�ܿ���������첽���Ͽ�������˵����ӣ�����ʾ��������
-//      ����첽���ָ�������˵����ӣ�����ʾ���ָ�������ʾ��
+//设置异步卡通讯状态检测功能是否开启
+//cardID： 需要设置通讯状态检测功能是否开启的异步卡ID
+//isEanble：是否开启通讯状态检测功能，如果开启则为True，否则为False
+//返回值：设置通讯状态检测功能是否开启的结果，如果设置成功，则返回True，否则返回False。
+//备注：异步卡通讯状态检测功能开启后，如果异步卡断开与管理端的连接，则显示屏黑屏，
+//      如果异步卡恢复与管理端的连接，则显示屏恢复正常显示。
 extern "C" __declspec(dllexport)bool __stdcall NP_SetConnectDetectEnable(char* cardID, bool isEanble);
-//��ȡ�첽��ͨѶ״̬��⹦���Ƿ���
-//cardID����Ҫ��ȡͨѶ״̬��⹦���Ƿ������첽��ID
-//isEanble����ȡ����ͨѶ״̬��⹦���Ƿ����ı�־
-//����ֵ����ȡͨѶ״̬��⹦���Ƿ����Ľ���������ȡ�ɹ����򷵻�True����isEanbleΪ�Ƿ��������򷵻�False��
+//获取异步卡通讯状态检测功能是否开启
+//cardID：需要获取通讯状态检测功能是否开启的异步卡ID
+//isEanble：获取到的通讯状态检测功能是否开启的标志
+//返回值：获取通讯状态检测功能是否开启的结果，如果获取成功，则返回True，且isEanble为是否开启，否则返回False。
 extern "C" __declspec(dllexport)bool __stdcall NP_GetConnectDetectEnable(char* cardID, bool* isEanble);
-//�������ڻ㱨���״̬���ܵĲ���
-//cardID�� ��Ҫ�������ڻ㱨���״̬���첽��ID
-//isEanble���Ƿ������ڻ㱨���״̬�����������ΪTrue������ΪFalse
-//cycleValue�����ڻ㱨���״̬�����ڣ���λΪ�룬��СֵΪ60�룬Ĭ��60��
-//����ֵ���������ڻ㱨���״̬�����Ƿ����Ľ����������óɹ����򷵻�True�����򷵻�False��
-//��ע��1.�ӿڷ���True��Ӧ�ó������ˢ�¼�سɹ����յ�WM_REFRESHMONITOROK����Ϣ��
-//        ��ϢIDΪ��ʼ��ʱ���õ���ϢID��WPARAM����ΪWM_REFRESHMONITOROK��
-//        LPARAM����Ϊ�����Ϣ�洢�ļ�ȫ·����ָ�롣
-//      2.�ӿڷ���True��Ӧ�ó������ˢ�¼��ʧ�ܺ��յ�WM_REFRESHMONITORFAILED����Ϣ��
-//        ��ϢIDΪ��ʼ��ʱ���õ���ϢID��WPARAM����ΪWM_REFRESHMONITORFAILED��
-//        LPARAM����Ϊˢ�¼������ʧ�ܵ�ԭ��
+//设置周期汇报监控状态功能的参数
+//cardID： 需要开启周期汇报监控状态的异步卡ID
+//isEanble：是否开启周期汇报监控状态，如果开启则为True，否则为False
+//cycleValue：周期汇报监控状态的周期，单位为秒，最小值为60秒，默认60秒
+//返回值：设置周期汇报监控状态功能是否开启的结果，如果设置成功，则返回True，否则返回False。
+//备注：1.接口返回True后，应用程序会在刷新监控成功后收到WM_REFRESHMONITOROK的消息，
+//        消息ID为初始化时设置的消息ID，WPARAM参数为WM_REFRESHMONITOROK，
+//        LPARAM参数为监控信息存储文件全路径的指针。
+//      2.接口返回True后，应用程序会在刷新监控失败后收到WM_REFRESHMONITORFAILED的消息，
+//        消息ID为初始化时设置的消息ID，WPARAM参数为WM_REFRESHMONITORFAILED，
+//        LPARAM参数为刷新监控数据失败的原因
 extern "C" __declspec(dllexport)bool __stdcall NP_SetCycleMontorConfig(char* cardID, bool isEanble, unsigned short cycleValue);
-//��ȡ���ڻ㱨���״̬���ܵĲ���
-//cardID����Ҫ��ȡ���ڻ㱨���״̬�����Ƿ������첽��ID
-//isEanble����ȡ�������ڻ㱨���״̬�Ƿ����ı�־
-//cycleValue����ȡ�������ڻ㱨���״̬������
-//����ֵ����ȡ���ڻ㱨���״̬���ܲ����Ľ����������óɹ����򷵻�True�����򷵻�False��
+//获取周期汇报监控状态功能的参数
+//cardID：需要获取周期汇报监控状态功能是否开启的异步卡ID
+//isEanble：获取到的周期汇报监控状态是否开启的标志
+//cycleValue：获取到的周期汇报监控状态的周期
+//返回值：获取周期汇报监控状态功能参数的结果，如果设置成功，则返回True，否则返回False。
 extern "C" __declspec(dllexport)bool __stdcall NP_GetCycleMontorConfig(char* cardID, bool* isEanble, unsigned short* cycleValue);
-//��ȡ�첽���Ľ�ͼ
-//cardID����Ҫ��ȡ��ͼ���첽��ID
-//picFileName: ��ȡ�����첽����ͼ��PC���ϵĴ洢·�����ļ�ȫ·������׺Ϊ.jpg��
-//����ֵ����ȡ�첽����ͼ�Ľ���������ȡ�ɹ����򷵻�True����picFileNameΪ��ȡ����ͼƬ�ļ�·�������򷵻�False��
+//获取异步卡的截图
+//cardID：需要获取截图的异步卡ID
+//picFileName: 获取到的异步卡截图在PC机上的存储路径（文件全路径，后缀为.jpg）
+//返回值：获取异步卡截图的结果，如果获取成功，则返回True，且picFileName为获取到的图片文件路径，否则返回False。
 extern "C" __declspec(dllexport)bool __stdcall NP_GetCardScreenShotPicture(char* cardID, char* picFileName);
 
-//�����첽�������Դ��״̬
-//cardID����Ҫ���õ�Դ״̬���첽��ID
-//powerState�����õı����Դ״̬��0���رգ� 1��������
-//����ֵ�������첽����Դ״̬�Ľ�����������True���ʾ���óɹ��������ʾʧ��
+//设置异步卡本板电源的状态
+//cardID：需要设置电源状态的异步卡ID
+//powerState：设置的本板电源状态（0：关闭， 1：开启）
+//返回值：设置异步卡电源状态的结果，如果返回True则表示设置成功，否则表示失败
 extern "C" __declspec(dllexport)bool _stdcall NP_SetOnBoardPowerState(char* cardID, unsigned char powerState);
-//��ȡ�첽�������Դ��״̬
-//cardID����Ҫ��ȡ��Դ״̬���첽��ID
-//powerState����ȡ���ı����Դ״̬��0���رգ� 1��������
-//����ֵ����ȡ�첽����Դ״̬�Ľ�����������True���ʾ��ȡ�ɹ�����powerStateΪ��ȡ���ĵ�Դ״̬�������ʾ��ȡʧ��
+//获取异步卡本板电源的状态
+//cardID：需要获取电源状态的异步卡ID
+//powerState：获取到的本板电源状态（0：关闭， 1：开启）
+//返回值：获取异步卡电源状态的结果，如果返回True则表示获取成功，且powerState为获取到的电源状态，否则表示获取失败
 extern "C" __declspec(dllexport)bool _stdcall NP_GetOnBoardPowerState(char* cardID, unsigned char* powerState);
-//���ñ����Դ�Զ����Ƶ���Ϣ���������Ҫ�Զ����ƣ���Ҫ���Զ�������Ϣ����Ϊ�գ�
-//cardID����Ҫ�����Զ�������Ϣ���첽��ID
-//autoCtrlInfo�����õı����Դ�Զ�������Ϣ
-//����ֵ�����ñ����Դ�Զ�������Ϣ�Ľ�����������True���ʾ���óɹ��������ʾʧ�ܡ�
+//设置本板电源自动控制的信息（如果不需要自动控制，需要将自动控制信息设置为空）
+//cardID：需要设置自动控制信息的异步卡ID
+//autoCtrlInfo：设置的本板电源自动控制信息
+//返回值：设置本板电源自动控制信息的结果，如果返回True则表示设置成功，否则表示失败。
 extern "C" __declspec(dllexport)bool _stdcall NP_SetOnBoardPowerAutoInfo(char* cardID, 
 																		 NP_BDPOWER_AUTOCTRL_INFO autoCtrlInfo);
-//��ȡ�����Դ�Զ����Ƶ���Ϣ
-//cardID����Ҫ��ȡ��Դ�Զ�������Ϣ���첽��ID
-//autoCtrlInfo����ȡ���ı����Դ�Զ�������Ϣ
-//����ֵ����ȡ�����Դ�Զ�������Ϣ�Ľ��
-//        �������True���ʾ��ȡ�ɹ�����autoCtrlInfoΪ��ȡ�ı����Դ�Զ�������Ϣ;
-//        �������False���ʾ��ȡʧ�ܡ�
+//获取本板电源自动控制的信息
+//cardID：需要获取电源自动控制信息的异步卡ID
+//autoCtrlInfo：获取到的本板电源自动控制信息
+//返回值：获取本板电源自动控制信息的结果
+//        如果返回True则表示获取成功，且autoCtrlInfo为获取的本板电源自动控制信息;
+//        如果返回False则表示获取失败。
 extern "C" __declspec(dllexport)bool _stdcall NP_GetOnBoardPowerAutoInfo(char* cardID,
 																		 NP_BDPOWER_AUTOCTRL_INFO* autoCtrlInfo);
 
-//�����������첽���ϵĶ๦�ܿ��ĵ�Դ����ģʽ
-//cardID����Ҫ���õ�Դ����ģʽ�Ķ๦�ܿ����ӵ��첽��ID
-//funCardIndex����Ҫ���õ�Դ����ģʽ�Ķ๦�ܿ���������0��ʼ��
-//adjustMode�����õĵ�Դ����ģʽ��0���ֶ��� 1���Զ���
-//����ֵ�����ö๦�ܿ���Դ����ģʽ�Ľ�����������True���ʾ���óɹ��������ʾʧ��
+//设置连接在异步卡上的多功能卡的电源调节模式
+//cardID：需要设置电源调节模式的多功能卡连接的异步卡ID
+//funCardIndex：需要设置电源调节模式的多功能卡索引（从0开始）
+//adjustMode：设置的电源调节模式（0：手动， 1：自动）
+//返回值：设置多功能卡电源调节模式的结果，如果返回True则表示设置成功，否则表示失败
 extern "C" __declspec(dllexport)bool _stdcall NP_SetFunPowerAdjustMode(char* cardID, 
 																	   unsigned short funCardIndex,
 																	   unsigned char adjustMode);
-//��ȡ�������첽���ϵĶ๦�ܿ��ĵ�Դ����ģʽ
-//cardID����Ҫ��ȡ��Դ����ģʽ�Ķ๦�ܿ����ӵ��첽��ID
-//funCardIndex����Ҫ��ȡ��Դ����ģʽ�Ķ๦�ܿ���������0��ʼ��
-//adjustMode����ȡ���ĵ�Դ����ģʽ��0���ֶ��� 1���Զ���
-//����ֵ����ȡ�๦�ܿ���Դ����ģʽ�Ľ��
-//        �������True���ʾ��ȡ�ɹ�����adjustModeΪ��ȡ���ĵ�Դ����ģʽ;
-//        �������False���ʾ��ȡʧ�ܡ�
+//获取连接在异步卡上的多功能卡的电源调节模式
+//cardID：需要获取电源调节模式的多功能卡连接的异步卡ID
+//funCardIndex：需要获取电源调节模式的多功能卡索引（从0开始）
+//adjustMode：获取到的电源调节模式（0：手动， 1：自动）
+//返回值：获取多功能卡电源调节模式的结果
+//        如果返回True则表示获取成功，且adjustMode为获取到的电源调节模式;
+//        如果返回False则表示获取失败。
 extern "C" __declspec(dllexport)bool _stdcall NP_GetFunPowerAdjustMode(char* cardID, 
 																	   unsigned short funCardIndex,
 																	   unsigned char* adjustMode);
-//�����������첽���ϵĶ๦�ܿ��ĵ�Դ״̬
-//cardID����Ҫ���õ�Դ״̬�Ķ๦�ܿ����ӵ��첽��ID
-//funCardIndex����Ҫ���õ�Դ״̬�Ķ๦�ܿ���������0��ʼ��
-//powerIndex����Ҫ����״̬�ĵ�Դ����(0~7)
-//powerState�����õĵ�Դ״̬��0���رգ�1��������
-//����ֵ�����ö๦�ܿ���Դ״̬�Ľ�����������True���ʾ���óɹ�������ʧ��
+//设置连接在异步卡上的多功能卡的电源状态
+//cardID：需要设置电源状态的多功能卡连接的异步卡ID
+//funCardIndex：需要设置电源状态的多功能卡索引（从0开始）
+//powerIndex：需要设置状态的电源索引(0~7)
+//powerState：设置的电源状态（0：关闭，1：开启）
+//返回值：设置多功能卡电源状态的结果，如果返回True则表示设置成功，否则失败
 extern "C" __declspec(dllexport)bool _stdcall NP_SetFunPowerState(char* cardID, 
 																  unsigned short funCardIndex,
 																  BYTE powerIndex,
 																  unsigned char powerState);
-//��ȡ�������첽���ϵĶ๦�ܿ��ĵ�Դ״̬
-//cardID����Ҫ��ȡ��Դ״̬�Ķ๦�ܿ����ӵ��첽��ID
-//funCardIndex����Ҫ��ȡ��Դ״̬�Ķ๦�ܿ���������0��ʼ��
-//powerIndex����Ҫ��ȡ״̬�ĵ�Դ����(0~7)
-//powerState����ȡ���ĵ�Դ״̬
-//����ֵ����ȡ�๦�ܿ���Դ״̬�Ľ��
-//        �������True���ʾ��ȡ�ɹ�����powerStateΪ��ȡ���ĵ�Դ״̬��Ϣ��
-//        �������False���ʾ��ȡʧ�ܡ�
+//获取连接在异步卡上的多功能卡的电源状态
+//cardID：需要获取电源状态的多功能卡连接的异步卡ID
+//funCardIndex：需要获取电源状态的多功能卡索引（从0开始）
+//powerIndex：需要获取状态的电源索引(0~7)
+//powerState：获取到的电源状态
+//返回值：获取多功能卡电源状态的结果
+//        如果返回True则表示获取成功，且powerState为获取到的电源状态信息；
+//        如果返回False则表示获取失败。
 extern "C" __declspec(dllexport)bool _stdcall NP_GetFunPowerState(char* cardID, 
 																  unsigned short funCardIndex,
 																  BYTE powerIndex,
 																  unsigned char* powerState);
-//�����������첽���ϵĶ๦�ܿ��ĵ�Դ�Զ�������Ϣ
-//cardID����Ҫ���õ�Դ�Զ�������Ϣ�Ķ๦�ܿ����ӵ��첽��ID
-//funCardIndex����Ҫ�����õ�Դ�Զ�������Ϣ�Ķ๦�ܿ���������0��ʼ��
-//autoCtrlInfo�����õĵ�Դ�Զ�������Ϣ
-//����ֵ�����ö๦�ܿ���Դ�Զ�������Ϣ�Ľ�����������True���ʾ���óɹ�������ʧ��
+//设置连接在异步卡上的多功能卡的电源自动控制信息
+//cardID：需要设置电源自动控制信息的多功能卡连接的异步卡ID
+//funCardIndex：需要获设置电源自动控制信息的多功能卡索引（从0开始）
+//autoCtrlInfo：设置的电源自动控制信息
+//返回值：设置多功能卡电源自动控制信息的结果，如果返回True则表示设置成功，否则失败
 extern "C" __declspec(dllexport)bool _stdcall NP_SetFunPowerAutoInfo(char* cardID, 
 																	 unsigned short funCardIndex,
 																	 NP_FUNPOWER_AUTOCTRL_INFO autoCtrlInfo);
-//��ȡ�������첽���ϵĶ๦�ܿ��ĵ�Դ�Զ�������Ϣ
-//cardID����Ҫ��ȡ��Դ�Զ�������Ϣ�Ķ๦�ܿ����ӵ��첽��ID
-//funCardIndex����Ҫ��ȡ��Դ�Զ�������Ϣ�Ķ๦�ܿ���������0��ʼ��
-//autoCtrlInfo����ȡ���ĵ�Դ�Զ�������Ϣ
-//����ֵ����ȡ�๦�ܿ���Դ�Զ�������Ϣ�Ľ��
-//        �������True���ʾ��ȡ�ɹ�����autoCtrlInfoΪ��ȡ���ĵ�Դ�Զ�������Ϣ��
-//        �������False���ʾ��ȡʧ�ܡ�
+//获取连接在异步卡上的多功能卡的电源自动控制信息
+//cardID：需要获取电源自动控制信息的多功能卡连接的异步卡ID
+//funCardIndex：需要获取电源自动控制信息的多功能卡索引（从0开始）
+//autoCtrlInfo：获取到的电源自动控制信息
+//返回值：获取多功能卡电源自动控制信息的结果
+//        如果返回True则表示获取成功，且autoCtrlInfo为获取到的电源自动控制信息；
+//        如果返回False则表示获取失败。
 extern "C" __declspec(dllexport)bool _stdcall NP_GetFunPowerAutoInfo(char* cardID, 
 																	 unsigned short funCardIndex,
 																	 NP_FUNPOWER_AUTOCTRL_INFO* autoCtrlInfo);
 
-//�����첽��ͨѶ״̬���Ĳ���
-//cardID����Ҫ����ͨѶ״̬���������첽��ID
-//detectPara����Ҫ���õ�ͨѶ״̬������
-//����ֵ������ͨѶ״̬�������Ľ�����������True���ʾ���óɹ�������ʧ��
+//设置异步卡通讯状态检测的参数
+//cardID：需要设置通讯状态检测参数的异步卡ID
+//detectPara：需要设置的通讯状态检测参数
+//返回值：设置通讯状态检测参数的结果，如果返回True则表示设置成功，否则失败
 extern "C" __declspec(dllexport)bool _stdcall NP_SetConnectDetectPara(char* cardID,
 																	  NP_CONNECTDETECT_PARA detectPara);
-//��ȡ�첽��ͨѶ״̬���Ĳ���
-//cardID����Ҫ��ȡͨѶ״̬���������첽��ID
-//detectPara����ȡ����ͨѶ״̬������
-//����ֵ����ȡͨѶ״̬�������Ľ��
-//        �������True���ʾ��ȡ�ɹ�����detectParaΪ��ȡ����ͨѶ״̬��������
-//        �������False���ʾ��ȡʧ�ܡ�
+//获取异步卡通讯状态检测的参数
+//cardID：需要获取通讯状态检测参数的异步卡ID
+//detectPara：获取到的通讯状态检测参数
+//返回值：获取通讯状态检测参数的结果
+//        如果返回True则表示获取成功，且detectPara为获取到的通讯状态检测参数；
+//        如果返回False则表示获取失败。
 extern "C" __declspec(dllexport)bool _stdcall NP_GetConnectDetectPara(char* cardID, 
 																	  NP_CONNECTDETECT_PARA* detectPara);
 
-//��ȡ�첽����ȫ�ּ����Ϣ
-//cardID����Ҫ��ȡ�첽��ȫ�ּ����Ϣ���첽��ID
-//monitorInfo����ȡ����ȫ�ּ����Ϣ
-//����ֵ����ȡȫ�ּ����Ϣ�Ľ��
-//        �������True���ʾ��ȡ�ɹ�����monitorInfoΪ��ȡ���ļ����Ϣ
-//        �������False���ʾ��ȡʧ�ܡ�
-//��ע��ֻ��ʹ�ýӿ�NP_SetSelfMonitorPara�����첽�����Լ칦�ܣ�������ÿ�λ�ȡȫ�ּ����Ϣʱ��õ��µ���Ϣ��
+//获取异步卡的全局监控信息
+//cardID：需要获取异步卡全局监控信息的异步卡ID
+//monitorInfo：获取到的全局监控信息
+//返回值：获取全局监控信息的结果
+//        如果返回True则表示获取成功，且monitorInfo为获取到的监控信息
+//        如果返回False则表示获取失败。
+//备注：只有使用接口NP_SetSelfMonitorPara开启异步卡的自检功能，才能在每次获取全局监控信息时获得到新的信息。
 extern "C" __declspec(dllexport)bool _stdcall NP_GetGlobalMonitorInfo(char* cardID, 
 																	  NP_GLOBALMONITOR_INFO* monitorInfo);
-//����Ӳ������
-//cardID����Ҫ����Ӳ���������첽��ID
-//����ֵ������Ӳ�������Ľ�����������True���ʾ����ɹ�������ʧ��
+//保存硬件参数
+//cardID：需要保存硬件参数的异步卡ID
+//返回值：保存硬件参数的结果，如果返回True则表示保存成功，否则失败
 extern "C" __declspec(dllexport)bool _stdcall NP_SaveHardwareParameter(char* cardID);
-//��ȡ�����ļ�������Ϣ
-//cardID����Ҫ��ȡ�ļ�������Ϣ���첽��ID
-//playFileType����Ҫ��ȡ������Ϣ�Ĳ����ļ����ͣ�0��ʾ���ŷ�����1��ʾ�岥�ļ���2��ʾ֪ͨ
-//fileSendInfo����ȡ�����ļ�������Ϣ
-//����ֵ����ȡ�ļ�������Ϣ�Ľ��
-//        �������True���ʾ��ȡ�ɹ�����fileSendInfoΪ��ȡ�����ļ�������Ϣ
-//        �������False���ʾ��ȡʧ�ܡ�
+//获取播放文件发送信息
+//cardID：需要获取文件发送信息的异步卡ID
+//playFileType：需要获取发送信息的播放文件类型：0表示播放方案，1表示插播文件，2表示通知
+//fileSendInfo：获取到的文件发送信息
+//返回值：获取文件发送信息的结果
+//        如果返回True则表示获取成功，且fileSendInfo为获取到的文件发送信息
+//        如果返回False则表示获取失败。
 extern "C" __declspec(dllexport)bool _stdcall NP_GetPlayFileSendInfo(char* cardID, 
 																	 unsigned char playFileType,
 																	 NP_SENDPLAYFILE_INFO* fileSendInfo);
 
-//�����첽�����Լ����
-//cardID����Ҫ�����Լ�������첽��ID
-//selfCtrlPara����Ҫ���õ��Լ����
-//����ֵ�������Լ�����Ľ�����������True���ʾ���óɹ�������ʧ��
+//设置异步卡的自检参数
+//cardID：需要设置自检参数的异步卡ID
+//selfCtrlPara：需要设置的自检参数
+//返回值：设置自检参数的结果，如果返回True则表示设置成功，否则失败
 extern "C" __declspec(dllexport)bool _stdcall NP_SetSelfMonitorCtrlPara(char* cardID, 
 																		NP_SELFMONITORCTRL_PARA selfCtrlPara);
-//��ȡ�첽�����Լ����
-//cardID����Ҫ��ȡ�Լ�������첽��ID
-//selfCtrlPara����ȡ�����Լ����
-//����ֵ����ȡ�Լ�����Ľ��
-//        �������True���ʾ��ȡ�ɹ�����selfCtrlParaΪ��ȡ�����Լ����
-//        �������False���ʾ��ȡʧ�ܡ�
+//获取异步卡的自检参数
+//cardID：需要获取自检参数的异步卡ID
+//selfCtrlPara：获取到的自检参数
+//返回值：获取自检参数的结果
+//        如果返回True则表示获取成功，且selfCtrlPara为获取到的自检参数
+//        如果返回False则表示获取失败。
 extern "C" __declspec(dllexport)bool _stdcall NP_GetSelfMonitorCtrlPara(char* cardID, 
 																		NP_SELFMONITORCTRL_PARA* selfCtrlPara);
-//���ö�ʱ���ȵ�����Ϣ
-//cardID����Ҫ���ö�ʱ���ȵ�����Ϣ���첽��ID
-//adjustInfo����Ҫ���õĶ�ʱ���ȵ�����Ϣ
-//����ֵ�����ö�ʱ���ȵ�����Ϣ�Ľ�����������True���ʾ���óɹ�������ʧ��
+//设置定时亮度调节信息
+//cardID：需要设置定时亮度调节信息的异步卡ID
+//adjustInfo：需要设置的定时亮度调节信息
+//返回值：设置定时亮度调节信息的结果，如果返回True则表示设置成功，否则失败
 extern "C" __declspec(dllexport)bool _stdcall NP_SetSchedualBrightInfo(char* cardID, 
 																	   NP_SCHEDUALBRIGHT_INFO adjustInfo);
-//��ȡ��ʱ���ȵ�����Ϣ
-//cardID����Ҫ��ȡ��ʱ���ȵ�����Ϣ���첽��ID
-//adjustInfo����ȡ���Ķ�ʱ���ȵ�����Ϣ
-//����ֵ����ȡ��ʱ���ȵ�����Ϣ�Ľ��
-//        �������True���ʾ��ȡ�ɹ�����adjustInfoΪ��ȡ���Ķ�ʱ���ȵ�����Ϣ
-//        �������False���ʾ��ȡʧ�ܡ�
+//获取定时亮度调节信息
+//cardID：需要获取定时亮度调节信息的异步卡ID
+//adjustInfo：获取到的定时亮度调节信息
+//返回值：获取定时亮度调节信息的结果
+//        如果返回True则表示获取成功，且adjustInfo为获取到的定时亮度调节信息
+//        如果返回False则表示获取失败。
 extern "C" __declspec(dllexport)bool _stdcall NP_GetSchedualBrightInfo(char* cardID, 
 																	   NP_SCHEDUALBRIGHT_INFO* adjustInfo);
 
-//ɾ���첽����ǰ�洢�豸��ý��
-//cardID����Ҫɾ��ý����첽��ID
-//deleteType����Ҫɾ�������ͣ�0��ʾ��ǰ�洢�豸������ý�壬1��ʾ��ǰ�洢�豸�Ĺ���ý��
-//����ֵ��ɾ��ý��Ľ�����������True���ʾɾ���ɹ�������ʧ��
+//删除异步卡当前存储设备的媒体
+//cardID：需要删除媒体的异步卡ID
+//deleteType：需要删除的类型：0表示当前存储设备的所有媒体，1表示当前存储设备的过期媒体
+//返回值：删除媒体的结果，如果返回True则表示删除成功，否则失败
 extern "C" __declspec(dllexport)bool _stdcall NP_DeleteMedia(char* cardID, unsigned char deleteType);
-//��ȡ�첽���Ĵ洢�豸��Ϣ
-//cardID����Ҫ��ȡ�洢�豸��Ϣ���첽��ID
-//storageDeviceInfo����ȡ���Ĵ洢�豸��Ϣ
-//����ֵ����ȡ�洢�豸��Ϣ�Ľ��
-//        �������True���ʾ��ȡ�ɹ�����storageDeviceInfoΪ��ȡ���Ĵ洢�豸��Ϣ
-//        �������False���ʾ��ȡʧ��
+//获取异步卡的存储设备信息
+//cardID：需要获取存储设备信息的异步卡ID
+//storageDeviceInfo：获取到的存储设备信息
+//返回值：获取存储设备信息的结果
+//        如果返回True则表示获取成功，且storageDeviceInfo为获取到的存储设备信息
+//        如果返回False则表示获取失败
 extern "C" __declspec(dllexport)bool _stdcall NP_GetStorageDeviceInfo(char* cardID, 
 																	  NP_STORAGEDEVICE_INFO* storageDeviceInfo);
